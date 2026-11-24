@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://quelquune.com/</loc><lastmod>2026-11-24</lastmod><priority>1.0</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://quelquune.com/</loc><lastmod>2026-11-24</lastmod><priority>1.0</priority><image:image><image:loc>https://quelquune.com/img/logo-quelquune-carre.png</image:loc><image:title>Logo Quelqu&#x27;UNE</image:title></image:image><image:image><image:loc>https://quelquune.com/img/logo-quelquune.png</image:loc><image:title>Logo Quelqu&#x27;UNE (Quelqu&#x27;une)</image:title></image:image><image:image><image:loc>https://quelquune.com/img/q-brun.png</image:loc><image:title>Logo Quelqu&#x27;UNE, le Q</image:title></image:image><image:image><image:loc>https://quelquune.com/img/qlub-brun.png</image:loc><image:title>Logo The Qlub by Quelqu&#x27;UNE</image:title></image:image></url>
   <url><loc>https://quelquune.com/communaute/</loc><lastmod>2026-11-24</lastmod><priority>0.9</priority></url>
   <url><loc>https://quelquune.com/the-qlub/</loc><lastmod>2026-11-24</lastmod><priority>0.9</priority></url>
   <url><loc>https://quelquune.com/evenements/</loc><lastmod>2026-11-24</lastmod><priority>0.8</priority></url>
