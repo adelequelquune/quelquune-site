@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<base href="/">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espace incubateur · Quelqu'UNE</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="img/q-brun.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ede3d3;--paper:#f6efe4;--cocoa:#5b3b24;--ink:#2e1f14;--soft:#6e5440;--toffee:#8c6a4a;--sand:#B6A489;--sand-l:#d9cbb4;--line:#d6c7b0;--ok:#4f7a4a;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "DM Sans",system-ui,sans-serif}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .18 0 0 0 0 .12 0 0 0 0 .08 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;font-weight:500;margin:0;letter-spacing:-.01em;line-height:1.12}
+h1{font-size:clamp(34px,4.4vw,54px);letter-spacing:-.03em}
+h2{font-size:clamp(24px,2.4vw,30px)}
+h3{font-size:19px}
+p{margin:0}
+a{color:inherit}
+button,input,textarea,select{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.soft{color:var(--soft)}.sm{font-size:14px}
+/* barre du haut */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:72px}
+.top img{height:38px;width:auto}
+.top .t{font-family:"Playfair Display",serif;font-size:19px}
+.top .sp{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:14.5px}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--cocoa);color:var(--paper);font-weight:600;font-size:14px;flex:none}
+/* boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-weight:600;font-size:15px;cursor:pointer;background:var(--cocoa);color:var(--paper);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 3px 0 #2f1e12,0 10px 20px -10px rgba(46,31,20,.5);transition:transform .2s,box-shadow .2s,background .2s;text-decoration:none}
+.btn:hover{background:var(--ink)}.btn:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 1px 0 #2f1e12}
+.btn.light{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line),0 3px 0 #cdbda3}
+.btn.light:hover{background:#fff}
+.btn.sm{padding:8px 16px;font-size:14px}
+.btn:disabled{opacity:.6;cursor:wait}
+.lnk{background:none;border:0;padding:0;cursor:pointer;color:var(--cocoa);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--sand)}
+:focus-visible{outline:2px solid var(--cocoa);outline-offset:2px}
+/* champs */
+label{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
+input,textarea,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:#fffaf2;font-size:16px}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--cocoa);outline-offset:1px;border-color:var(--cocoa)}
+.fld{margin-bottom:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px}
+/* cartes */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:clamp(20px,2.6vw,30px)}
+.dark{background:radial-gradient(120% 140% at 0% 0%,#6b4529 0%,var(--cocoa) 42%,#2e1f14 100%);color:var(--paper);border:0}
+.dark .soft{color:#e1cfb4}
+.sec{margin-top:28px}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.grid{display:grid;gap:20px}
+.g-hero{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.g-main{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:start}
+@media(max-width:900px){.g-hero,.g-main{grid-template-columns:minmax(0,1fr)}.g2{grid-template-columns:minmax(0,1fr)}}
+/* connexion */
+.login{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:40px 18px}
+.login .card{width:min(440px,100%)}
+.lock{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--cocoa);color:var(--paper);margin-bottom:20px}
+.lock .shackle{transition:transform .5s var(--ease);transform-origin:16px 11px}
+.lock.open .shackle{transform:translateY(-3px) rotate(-28deg)}
+.err{color:#9b3b2a;font-weight:500;margin-bottom:12px}
+/* héros incubée */
+.hello{display:flex;flex-direction:column;gap:14px;justify-content:center}
+.lvl{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px 6px 6px;font-size:14px;width:max-content}
+.lvl b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f0dcb6;color:var(--ink);font-family:"Playfair Display",serif}
+.xpbar{height:10px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden}
+.xpbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e6c9a4,#f8ead2);border-radius:999px;transition:width 1.2s var(--ease)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px}
+.stat strong{display:block;font:600 34px/1 "Playfair Display",serif;color:var(--cocoa)}
+.stat span{font-size:13.5px;color:var(--soft)}
+.ringwrap{display:flex;align-items:center;gap:18px}
+.ring{width:118px;height:118px;flex:none}
+.ring circle{fill:none;stroke-width:10}
+.ring .bgc{stroke:var(--line)}.ring .fgc{stroke:var(--cocoa);stroke-linecap:round;transition:stroke-dashoffset 1.4s var(--ease);transform:rotate(-90deg);transform-origin:50% 50%}
+.ring text{font:600 24px "Playfair Display",serif;fill:var(--ink)}
+/* parcours */
+.path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:s}
+.st{position:relative;padding:18px 16px 16px;border-radius:10px;border:1px solid var(--line);background:var(--paper)}
+.st .n{font:600 13px "DM Sans";color:var(--toffee)}
+.st h3{font-size:17px;margin:6px 0 10px}
+.st .bar{height:6px;border-radius:999px;background:var(--bg);overflow:hidden}.st .bar i{display:block;height:100%;background:var(--sand);width:0;transition:width 1s var(--ease)}
+.st.done{background:#efe6d6}.st.done .bar i{background:var(--ok)}
+.st.cur{border-color:var(--cocoa);box-shadow:0 0 0 1px var(--cocoa),0 18px 30px -20px rgba(46,31,20,.6)}
+.st.cur .n::after{content:" · en cours";color:var(--cocoa)}
+.st.done .n::after{content:" · validée ✓";color:var(--ok)}
+.st.later{opacity:.6}
+@media(max-width:760px){.path{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+/* listes */
+.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.obj{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:#fffaf2;transition:background .3s}
+.obj.done{background:#eef0e4}
+.obj .t{flex:1}
+.obj.done .t{text-decoration:line-through;text-decoration-color:var(--sand);color:var(--soft)}
+.chk{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex:none;border:2px solid var(--cocoa);border-radius:6px;padding:0;margin-top:1px;cursor:pointer;display:grid;place-items:center;background:#fff}
+.chk:checked{background:var(--cocoa)}
+.chk:checked::after{content:"";width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.chk:disabled{cursor:default;opacity:.7}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--bg);color:var(--soft)}
+.tag.warn{background:#f6e2c4;color:#7a4a12}.tag.ok{background:#e1ead9;color:#3f6339}
+.mtg{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:#fffaf2}
+.date{width:64px;height:64px;border-radius:8px;background:var(--cocoa);color:var(--paper);display:grid;place-items:center;text-align:center;line-height:1.05}
+.date b{font:600 24px "Playfair Display",serif;display:block}.date small{font-size:11.5px;text-transform:lowercase}
+.mtg.past .date{background:var(--sand);color:var(--ink)}
+@media(max-width:560px){.mtg{grid-template-columns:56px minmax(0,1fr)}.mtg .act{grid-column:1/-1}.date{width:56px;height:56px}}
+.jr{padding:16px;border:1px solid var(--line);border-radius:8px;background:#fffaf2}
+.jr h4{margin:0 0 4px;font-size:13px;color:var(--toffee);font-weight:600}
+.jr p{white-space:pre-wrap;margin-bottom:10px}
+.cm{margin-top:8px;padding:10px 12px;border-left:3px solid var(--sand);background:var(--paper);font-size:14.5px}
+.cm b{font-weight:600}
+.works{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.wk{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--line);border-radius:8px;background:#fffaf2;text-decoration:none;transition:transform .3s var(--ease),box-shadow .3s}
+.wk:hover{transform:translateY(-3px);box-shadow:0 14px 24px -16px rgba(46,31,20,.5)}
+.wk .ico{font-size:22px}
+.wk .tt{font-weight:600;word-break:break-word}
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:12px}
+.bdg{display:grid;justify-items:center;text-align:center;gap:8px;font-size:12.5px;line-height:1.3;color:var(--soft)}
+.bdg .m{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle at 30% 25%,#fbf3e4,#e6c9a4 55%,var(--sand) 100%);box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--sand),0 10px 16px -10px rgba(46,31,20,.6);transition:transform .5s var(--ease)}
+.bdg:hover .m{transform:rotate(-8deg) scale(1.06)}
+.bdg.off .m{filter:grayscale(1);opacity:.35;box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--line)}
+.bdg.off{opacity:.75}
+.bdg b{color:var(--ink);font-weight:600}
+/* événements */
+.ev{display:grid;gap:8px}
+.ev .when{font-size:14px;color:#e1cfb4}
+/* mentore / admin */
+.incs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.inc{cursor:pointer;text-align:left;width:100%;transition:transform .35s var(--ease),box-shadow .35s}
+.inc:hover{transform:translateY(-4px);box-shadow:0 22px 36px -24px rgba(46,31,20,.6)}
+.inc .hd{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.mini{height:6px;border-radius:999px;background:var(--bg);overflow:hidden;margin:8px 0 6px}.mini i{display:block;height:100%;background:var(--cocoa)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--soft);font-weight:600}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 8px}
+.tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:14px}
+.tab[aria-selected=true]{background:var(--cocoa);color:var(--paper);border-color:var(--cocoa)}
+.pw{font:600 18px ui-monospace,Menlo,monospace;background:#fff;border:1px dashed var(--cocoa);padding:10px 14px;border-radius:6px;display:inline-block;letter-spacing:.04em}
+/* modale */
+dialog{border:0;border-radius:12px;padding:0;width:min(640px,calc(100vw - 24px));max-height:calc(100vh - 32px);background:var(--paper);color:var(--ink);box-shadow:0 40px 80px -20px rgba(30,18,10,.5)}
+dialog::backdrop{background:rgba(46,31,20,.45);backdrop-filter:blur(3px)}
+dialog .in{padding:clamp(20px,3vw,32px)}
+dialog .hd{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:18px}
+.x{background:none;border:0;font-size:26px;line-height:1;cursor:pointer;color:var(--soft)}
+/* toast + confettis */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:999px;font-weight:600;z-index:200;transition:all .4s var(--ease);pointer-events:none;box-shadow:0 14px 30px -10px rgba(0,0,0,.4)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+.cf{position:fixed;width:8px;height:12px;z-index:199;pointer-events:none;border-radius:2px;animation:cf 1.1s cubic-bezier(.2,.7,.4,1) forwards}
+@keyframes cf{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.empty{padding:18px;border:1px dashed var(--line);border-radius:8px;color:var(--soft);text-align:center;font-size:14.5px}
+.back{margin:24px 0 0}
+.loading{display:grid;place-items:center;min-height:50vh}
+.loading img{width:64px;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(.94)}}
+.reveal{animation:rv .8s var(--ease) both}
+@keyframes rv{from{opacity:0;transform:translateY(16px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+footer{margin-top:56px;padding:28px 0;border-top:1px solid var(--line);font-size:14px;color:var(--soft)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a href="/" aria-label="Retour au site Quelqu'UNE"><img src="img/q-brun.png" alt=""></a>
+    <span class="t">Espace incubateur</span>
+    <span class="sp"></span>
+    <div class="who" id="who" hidden><span class="av" id="whoav"></span><span id="whoname"></span><button class="lnk" id="pwbtn" type="button">Mot de passe</button><button class="lnk" id="logout" type="button">Se déconnecter</button></div>
+  </div>
+</header>
+<main id="app"><div class="loading"><img src="img/q-brun.png" alt="Chargement"></div></main>
+<div class="wrap"><footer>Espace privé réservé aux incubées, mentores et à l'équipe Quelqu'UNE. Une question : <a href="mailto:contact@quelquune.com">contact@quelquune.com</a></footer></div>
+<dialog id="dlg"><div class="in" id="dlgin"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(()=>{
+'use strict';
+/* ===== Configuration ===== */
+const SB='https://udglemrdxabpzedqnkml.supabase.co';
+const KEY='sb_publishable_WO3vCjmobkHBFIIWVC9xyw_xI_xauOB';
+const DEMO=new URLSearchParams(location.search).has('demo');
+const STEPS=[
+ {n:1,t:'Valider le besoin',d:'Interroger ses futures clientes et confirmer le problème.'},
+ {n:2,t:'Bâtir une offre qui se vend',d:'Prix, proposition de valeur, premières ventes.'},
+ {n:3,t:'Organiser ses finances',d:'Budget, prévisionnel, statut juridique.'},
+ {n:4,t:'Convaincre financeurs et partenaires',d:'Pitch, dossier de financement, réseau.'}];
+const LEVELS=[{min:0,n:'Graine'},{min:100,n:'Pousse'},{min:250,n:'Bâtisseuse'},{min:500,n:'Ambassadrice'},{min:800,n:'Pionnière'}];
+const PTS={objective:15,journal:20,quick:10,work:10,meeting:10};
+
+/* ===== Outils ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtD=d=>new Date(d).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+const fmtT=d=>new Date(d).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const day=d=>new Date(d).toLocaleDateString('fr-FR',{day:'numeric'});
+const mon=d=>new Date(d).toLocaleDateString('fr-FR',{month:'short'});
+const initials=n=>(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join('');
+const first=n=>(n||'').split(/\s+/)[0]||'';
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)};
+const confetti=(x,y)=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const C=['#5b3b24','#B6A489','#e6c9a4','#8c6a4a','#4f7a4a'];for(let i=0;i<26;i++){const e=document.createElement('i');e.className='cf';e.style.left=x+'px';e.style.top=y+'px';e.style.background=C[i%C.length];e.style.setProperty('--dx',(Math.random()*240-120)+'px');e.style.setProperty('--dy',(Math.random()*-200-40)+'px');e.style.setProperty('--r',(Math.random()*720)+'deg');document.body.appendChild(e);setTimeout(()=>e.remove(),1200)}};
+
+/* ===== Accès aux données (Supabase REST, sans bibliothèque) ===== */
+let S=null;try{S=JSON.parse(localStorage.getItem('qinc_s')||'null')}catch(e){}
+const saveS=()=>{try{S?localStorage.setItem('qinc_s',JSON.stringify(S)):localStorage.removeItem('qinc_s')}catch(e){}};
+async function authReq(path,body){const r=await fetch(SB+'/auth/v1/'+path,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error_description||j.msg||j.message||'Erreur');return j}
+async function login(email,password){const j=await authReq('token?grant_type=password',{email,password});S={at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1000,uid:j.user.id};saveS()}
+async function refresh(){if(!S)return;if(Date.now()<S.exp-60000)return;try{const j=await authReq('token?grant_type=refresh_token',{refresh_token:S.rt});S={at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1000,uid:j.user.id};saveS()}catch(e){S=null;saveS();throw new Error('Session expirée, reconnectez-vous.')}}
+async function api(path,opt={}){await refresh();const r=await fetch(SB+path,{...opt,headers:{apikey:KEY,Authorization:'Bearer '+S.at,'Content-Type':'application/json',...(opt.headers||{})}});if(r.status===204)return null;const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){j=t}if(!r.ok)throw new Error((j&&(j.message||j.error||j.msg))||'Erreur '+r.status);return j}
+const DB={
+ get:(t,q='')=>api('/rest/v1/'+t+'?'+q),
+ ins:(t,row)=>api('/rest/v1/'+t,{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)}).then(r=>r&&r[0]),
+ upd:(t,q,row)=>api('/rest/v1/'+t+'?'+q,{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(row)}),
+ del:(t,q)=>api('/rest/v1/'+t+'?'+q,{method:'DELETE'}),
+ rpc:(f,args)=>api('/rest/v1/rpc/'+f,{method:'POST',body:JSON.stringify(args||{})}),
+ upload:async(path,file)=>{await refresh();const r=await fetch(SB+'/storage/v1/object/travaux/'+path,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+S.at,'Content-Type':file.type||'application/octet-stream','x-upsert':'false'},body:file});if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||'Envoi impossible')}},
+ signed:async path=>{const j=await api('/storage/v1/object/sign/travaux/'+path,{method:'POST',body:JSON.stringify({expiresIn:3600})});return SB+'/storage/v1'+j.signedURL},
+ setPassword:async pw=>{await refresh();const r=await fetch(SB+'/auth/v1/user',{method:'PUT',headers:{apikey:KEY,Authorization:'Bearer '+S.at,'Content-Type':'application/json'},body:JSON.stringify({password:pw})});if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.msg||j.message||'Modification impossible')}}
+};
+
+/* ===== Mode démonstration (aucune donnée réelle) ===== */
+if(DEMO){const now=Date.now(),h=3600e3,D=24*h;const me='u1',men='m1';
+ const T={profiles:[{id:me,role:'incubee',full_name:'Awa Diallo',email:'awa@exemple.com',project_name:'Tontinéo',sector:'Fintech',current_step:2},{id:men,role:'mentor',full_name:'Marie Kouassi',email:'marie@exemple.com',current_step:1},{id:'u2',role:'incubee',full_name:'Fatou Ba',email:'f@x.fr',project_name:'AgriFemme IA',sector:'AgriTech',current_step:1},{id:'a1',role:'admin',full_name:'Adèle Bata',email:'contact@quelquune.com',current_step:1}],
+ mentorships:[{mentor_id:men,incubee_id:me}],
+ objectives:[{id:'o1',incubee_id:me,step:1,title:'Interroger 15 futures clientes',done:true,done_at:new Date(now-20*D).toISOString()},{id:'o2',incubee_id:me,step:1,title:'Rédiger le problème en une phrase',done:true,done_at:new Date(now-15*D).toISOString()},{id:'o3',incubee_id:me,step:2,title:'Fixer le prix de lancement',done:true,done_at:new Date(now-3*D).toISOString()},{id:'o4',incubee_id:me,step:2,title:'Obtenir 3 premières ventes',done:false},{id:'o5',incubee_id:me,step:2,title:'Tester la page de vente',done:false},{id:'o6',incubee_id:me,step:3,title:'Construire le prévisionnel sur 12 mois',done:false}],
+ meetings:[{id:'mt1',incubee_id:me,mentor_id:men,title:'Point mentorat · offre',starts_at:new Date(now-3*D).toISOString(),ends_at:new Date(now-3*D+h).toISOString(),location:'Google Meet',source:'gcal'},{id:'mt2',incubee_id:me,mentor_id:men,title:'Atelier pricing',starts_at:new Date(now-1*D).toISOString(),ends_at:new Date(now-1*D+h).toISOString(),location:'Visio',source:'manual'},{id:'mt3',incubee_id:me,mentor_id:men,title:'Point mentorat · ventes',starts_at:new Date(now+4*D).toISOString(),ends_at:new Date(now+4*D+h).toISOString(),location:'Google Meet',source:'gcal'}],
+ journals:[{id:'j1',incubee_id:me,meeting_id:'mt1',learned:'Mes clientes ne veulent pas une appli de plus : elles veulent garder la confiance du groupe.',ideas:'Proposer un parrainage entre tontines.',next_steps:'Tester le prix à 4,90 € par mois.',created_at:new Date(now-3*D+2*h).toISOString()}],
+ works:[{id:'w1',incubee_id:me,title:'Synthèse des entretiens',kind:'link',url:'https://docs.google.com',created_at:new Date(now-14*D).toISOString()},{id:'w2',incubee_id:me,title:'Grille tarifaire v2',kind:'link',url:'https://canva.com',created_at:new Date(now-2*D).toISOString()}],
+ comments:[{id:'c1',incubee_id:me,author_id:men,target_type:'journal',target_id:'j1',body:'Très juste. On creuse le parrainage la semaine prochaine.',created_at:new Date(now-2*D).toISOString()}],
+ private_events:[{id:'e1',title:'Atelier collaboratif avec Networthink',description:'Échanger ses besoins contre ses compétences : rencontres, expertises partagées et nouvelles collaborations.',starts_at:'2026-12-02T19:00:00+01:00',join_url:null}]};
+ const role=new URLSearchParams(location.search).get('demo')||'incubee';
+ S={uid:role==='mentor'?men:role==='admin'?'a1':me,at:'demo',exp:9e15};
+ const filt=(t,q)=>{let a=T[t]||[];const p=new URLSearchParams(q);for(const[k,v]of p){if(['select','order','limit'].includes(k))continue;const m=v.match(/^(eq|in)\.(.*)$/);if(!m)continue;if(m[1]==='eq')a=a.filter(r=>String(r[k])===m[2]);else{const L=m[2].replace(/[()]/g,'').split(',');a=a.filter(r=>L.includes(String(r[k])))}}return a};
+ DB.get=async(t,q)=>JSON.parse(JSON.stringify(filt(t,q)));
+ DB.ins=async(t,row)=>{const r={id:'x'+Math.random().toString(36).slice(2),created_at:new Date().toISOString(),incubee_id:S.uid,author_id:S.uid,...row};T[t].push(r);return r};
+ DB.upd=async(t,q,row)=>{filt(t,q).forEach(r=>Object.assign(r,row));return[]};
+ DB.del=async(t,q)=>{const L=filt(t,q);T[t]=T[t].filter(r=>!L.includes(r))};
+ DB.rpc=async(f,a)=>{if(f==='admin_create_user')return{id:'n1',email:a.p_email,password:'Q-exemple123'};if(f==='set_incubee_step'){T.profiles.find(p=>p.id===a.p_incubee).current_step=a.p_step}return null};
+ DB.upload=async()=>{};DB.signed=async()=>'#';DB.setPassword=async()=>{};
+}
+
+/* ===== Calculs : points, niveaux, badges ===== */
+function score(d){
+ const now=Date.now();
+ const done=d.objectives.filter(o=>o.done);
+ const past=d.meetings.filter(m=>new Date(m.ends_at)<now);
+ let pts=done.length*PTS.objective+d.journals.length*PTS.journal+d.works.length*PTS.work+past.length*PTS.meeting;
+ let quick=0;d.journals.forEach(j=>{const m=d.meetings.find(x=>x.id===j.meeting_id);if(m&&new Date(j.created_at)-new Date(m.ends_at)<48*3600e3)quick++});
+ pts+=quick*PTS.quick;
+ const lvl=[...LEVELS].reverse().find(l=>pts>=l.min);const li=LEVELS.indexOf(lvl);const nx=LEVELS[li+1];
+ const pct=nx?Math.round((pts-lvl.min)/(nx.min-lvl.min)*100):100;
+ // série : semaines consécutives avec au moins une action
+ const acts=[...done.map(o=>o.done_at),...d.journals.map(j=>j.created_at),...d.works.map(w=>w.created_at)].filter(Boolean).map(x=>new Date(x));
+ const wk=t=>Math.floor((t-new Date('2024-01-01'))/(7*864e5));
+ const set=new Set(acts.map(wk));let streak=0,w=wk(new Date());if(!set.has(w))w--;while(set.has(w)){streak++;w--}
+ const st=d.profile.current_step||1;
+ const B=[
+  {i:'🤝',t:'Première rencontre',ok:past.length>=1},
+  {i:'📓',t:'Premier carnet',ok:d.journals.length>=1},
+  {i:'📚',t:'5 carnets remplis',ok:d.journals.length>=5},
+  {i:'⚡',t:'Carnet en 48 h',ok:quick>=1},
+  {i:'📎',t:'Premier dépôt',ok:d.works.length>=1},
+  {i:'🎯',t:'5 objectifs atteints',ok:done.length>=5},
+  {i:'🔥',t:'3 semaines d\'affilée',ok:streak>=3},
+  {i:'🌱',t:'Besoin validé',ok:st>1},
+  {i:'💼',t:'Offre bâtie',ok:st>2},
+  {i:'📊',t:'Finances en ordre',ok:st>3},
+  {i:'🎤',t:'Prête à convaincre',ok:st>=4&&d.objectives.filter(o=>o.step===4).length>0&&d.objectives.filter(o=>o.step===4).every(o=>o.done)}];
+ return {pts,lvl,li,nx,pct,streak,badges:B,doneN:done.length,totN:d.objectives.length,quick};
+}
+
+/* ===== Chargement d'une incubée ===== */
+async function loadIncubee(id){
+ const [p,ob,mt,jr,wk,cm,ms]=await Promise.all([
+  DB.get('profiles','id=eq.'+id),DB.get('objectives','incubee_id=eq.'+id+'&order=step.asc,created_at.asc'),
+  DB.get('meetings','incubee_id=eq.'+id+'&order=starts_at.asc'),DB.get('journals','incubee_id=eq.'+id+'&order=created_at.desc'),
+  DB.get('works','incubee_id=eq.'+id+'&order=created_at.desc'),DB.get('comments','incubee_id=eq.'+id+'&order=created_at.asc'),
+  DB.get('mentorships','incubee_id=eq.'+id)]);
+ const people={};const ids=[...new Set([...cm.map(c=>c.author_id),...mt.map(m=>m.mentor_id).filter(Boolean),...ms.map(m=>m.mentor_id)])];
+ if(ids.length){(await DB.get('profiles','id=in.('+ids.join(',')+')')).forEach(x=>people[x.id]=x)}
+ return {profile:p[0],objectives:ob,meetings:mt,journals:jr,works:wk,comments:cm,mentors:ms.map(m=>people[m.mentor_id]).filter(Boolean),people};
+}
+
+/* ===== Rendu ===== */
+const app=$('#app');let ME=null;let VIEW=null;
+function setWho(){const w=$('#who');if(!ME){w.hidden=true;return}w.hidden=false;$('#whoav').textContent=initials(ME.full_name);$('#whoname').textContent=first(ME.full_name)}
+
+function ring(p){const r=50,c=2*Math.PI*r;return `<svg class="ring" viewBox="0 0 118 118" aria-hidden="true"><circle class="bgc" cx="59" cy="59" r="${r}"/><circle class="fgc" cx="59" cy="59" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-off="${c*(1-p/100)}"/><text x="59" y="67" text-anchor="middle">${p}%</text></svg>`}
+function animate(){requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('.fgc[data-off]').forEach(e=>e.style.strokeDashoffset=e.dataset.off);document.querySelectorAll('[data-w]').forEach(e=>e.style.width=e.dataset.w)}))}
+
+function renderLogin(msg){
+ VIEW=null;ME=null;setWho();
+ app.innerHTML=`<div class="login"><form class="card reveal" id="lf" novalidate>
+  <div class="lock" id="lock"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path class="shackle" d="M10 14V10a6 6 0 0 1 12 0v4"/><rect x="7" y="14" width="18" height="13" rx="3"/><circle cx="16" cy="20.5" r="1.6" fill="currentColor"/></svg></div>
+  <h1 style="font-size:34px">Espace incubateur</h1>
+  <p class="soft" style="margin:10px 0 24px">Réservé aux incubées, aux mentores et à l'équipe Quelqu'UNE.</p>
+  ${msg?`<p class="err">${esc(msg)}</p>`:''}<p class="err" id="lerr" hidden></p>
+  <div class="fld"><label for="le">Adresse e-mail</label><input id="le" type="email" autocomplete="username" required></div>
+  <div class="fld"><label for="lp">Mot de passe</label><input id="lp" type="password" autocomplete="current-password" required></div>
+  <button class="btn" style="width:100%" id="lb">Se connecter</button>
+  <p class="soft sm" style="margin-top:16px;text-align:center">Mot de passe oublié ou pas encore de compte ? Écrivez à <a href="mailto:contact@quelquune.com">contact@quelquune.com</a>.</p>
+ </form></div>`;
+ $('#lf').addEventListener('submit',async e=>{e.preventDefault();const b=$('#lb'),er=$('#lerr');er.hidden=true;b.disabled=true;b.textContent='Connexion…';
+  try{await login($('#le').value.trim(),$('#lp').value);$('#lock').classList.add('open');setTimeout(boot,450)}
+  catch(x){er.textContent=/invalid/i.test(x.message)?'E-mail ou mot de passe incorrect.':x.message;er.hidden=false;b.disabled=false;b.textContent='Se connecter'}});
+}
+
+async function boot(){
+ if(!S){renderLogin();return}
+ try{const p=await DB.get('profiles','id=eq.'+S.uid);ME=p[0];setWho();
+  if(!ME||ME.role==='none'){app.innerHTML=`<div class="login"><div class="card"><h2>Compte en attente</h2><p class="soft" style="margin-top:10px">Votre compte n'a pas encore d'accès. Écrivez à <a href="mailto:contact@quelquune.com">contact@quelquune.com</a>.</p></div></div>`;return}
+  if(ME.role==='incubee')return showIncubee(ME.id);
+  if(ME.role==='mentor')return showMentor();
+  return showAdmin();
+ }catch(x){S=null;saveS();renderLogin(x.message)}
+}
+
+/* --- Vue d'une incubée (pour elle-même, sa mentore ou l'admin) --- */
+async function showIncubee(id,from){
+ VIEW={t:'inc',id,from};app.innerHTML='<div class="loading"><img src="img/q-brun.png" alt="Chargement"></div>';
+ const d=await loadIncubee(id);if(!d.profile){app.innerHTML='<div class="wrap"><p class="empty">Incubée introuvable.</p></div>';return}
+ const self=ME.id===id,canEdit=ME.role!=='incubee';const sc=score(d);const now=Date.now();
+ const up=d.meetings.filter(m=>new Date(m.ends_at)>=now),past=d.meetings.filter(m=>new Date(m.ends_at)<now).reverse();
+ const jByM={};d.journals.forEach(j=>{if(j.meeting_id)jByM[j.meeting_id]=j});
+ const todo=past.filter(m=>!jByM[m.id]);
+ const st=d.profile.current_step||1;
+ const stepPct=n=>{const o=d.objectives.filter(x=>x.step===n);return o.length?Math.round(o.filter(x=>x.done).length/o.length*100):(n<st?100:0)};
+ const globalPct=Math.round(STEPS.reduce((a,s)=>a+(s.n<st?100:s.n===st?stepPct(s.n):0),0)/4);
+ const nm=esc(first(d.profile.full_name));
+ let ev=[];try{ev=self?await DB.get('private_events','order=starts_at.asc'):[]}catch(e){}
+ ev=ev.filter(e=>new Date(e.ends_at||e.starts_at)>now-6*3600e3);
+ app.innerHTML=`<div class="wrap reveal">
+ ${from?`<p class="back"><button class="lnk" id="bk">← ${from==='admin'?'Retour à l\'administration':'Retour à mes incubées'}</button></p>`:''}
+ <div class="grid g-hero sec">
+  <div class="card dark hello">
+   <span class="lvl"><b>${sc.li+1}</b>Niveau ${esc(sc.lvl.n)}</span>
+   <h1>${self?'Bonjour '+nm+' !':esc(d.profile.full_name)}</h1>
+   <p class="soft">${esc(d.profile.project_name||'Projet')}${d.profile.sector?' · '+esc(d.profile.sector):''}${d.mentors.length?' · Mentore : '+d.mentors.map(m=>esc(m.full_name)).join(', '):''}</p>
+   <div><div class="row" style="justify-content:space-between;font-size:14px;margin-bottom:8px"><span>${sc.pts} points</span><span class="soft">${sc.nx?'Encore '+(sc.nx.min-sc.pts)+' pts pour « '+esc(sc.nx.n)+' »':'Niveau maximum atteint'}</span></div><div class="xpbar"><i data-w="${sc.pct}%"></i></div></div>
+   ${todo.length&&self?`<div class="row"><button class="btn light sm" data-fill="${todo[0].id}">Remplir mon carnet · ${esc(todo[0].title)}</button><span class="soft sm">+${PTS.journal} pts</span></div>`:''}
+  </div>
+  <div class="grid" style="gap:12px">
+   <div class="card ringwrap">${ring(globalPct)}<div><h3>Parcours d'accompagnement</h3><p class="soft sm" style="margin-top:6px">Étape ${st} sur 4 : ${esc(STEPS[st-1].t)}</p></div></div>
+   <div class="stats"><div class="stat"><strong>${sc.doneN}/${sc.totN}</strong><span>objectifs atteints</span></div><div class="stat"><strong>${d.journals.length}</strong><span>carnets remplis</span></div><div class="stat"><strong>${sc.streak}</strong><span>semaine${sc.streak>1?'s':''} d'affilée 🔥</span></div></div>
+  </div>
+ </div>
+
+ <section class="sec"><div class="sechead"><h2>Mon parcours</h2>${canEdit?`<div class="row"><label for="stsel" class="sm" style="margin:0">Étape en cours</label><select id="stsel" style="width:auto">${STEPS.map(s=>`<option value="${s.n}" ${s.n===st?'selected':''}>${s.n}. ${esc(s.t)}</option>`).join('')}</select></div>`:''}</div>
+  <div class="path">${STEPS.map(s=>`<div class="st ${s.n<st?'done':s.n===st?'cur':'later'}"><span class="n">Étape ${s.n}</span><h3>${esc(s.t)}</h3><p class="soft sm" style="margin-bottom:12px">${esc(s.d)}</p><div class="bar"><i data-w="${s.n<st?100:stepPct(s.n)}%"></i></div></div>`).join('')}</div>
+ </section>
+
+ <div class="grid g-main sec">
+  <div class="grid" style="gap:28px">
+   <section><div class="sechead"><h2>Objectifs</h2><button class="btn light sm" id="addobj">+ Ajouter un objectif</button></div>
+    ${d.objectives.length?STEPS.filter(s=>d.objectives.some(o=>o.step===s.n)).map(s=>`<p class="sm soft" style="margin:14px 0 8px;font-weight:600">Étape ${s.n} · ${esc(s.t)}</p><ul class="list">${d.objectives.filter(o=>o.step===s.n).map(o=>`<li class="obj ${o.done?'done':''}"><input type="checkbox" class="chk" data-obj="${o.id}" ${o.done?'checked':''} aria-label="${esc(o.title)}"><span class="t">${esc(o.title)}${o.due_date?` <span class="tag">avant le ${new Date(o.due_date).toLocaleDateString('fr-FR')}</span>`:''}</span>${!o.done?`<span class="tag">+${PTS.objective} pts</span>`:''}</li>`).join('')}</ul>`).join(''):'<p class="empty">Aucun objectif pour l\'instant. Ajoutez le premier avec votre mentore.</p>'}
+   </section>
+
+   <section><div class="sechead"><h2>Carnet de bord</h2>${self?'<button class="btn light sm" id="addjr">+ Nouveau carnet</button>':''}</div>
+    ${d.journals.length?`<div class="grid" style="gap:12px">${d.journals.map(j=>{const m=d.meetings.find(x=>x.id===j.meeting_id);const cs=d.comments.filter(c=>c.target_type==='journal'&&c.target_id===j.id);const ws=d.works.filter(w=>w.journal_id===j.id);return `<article class="jr"><div class="row" style="justify-content:space-between;margin-bottom:10px"><b>${m?esc(m.title):'Carnet libre'}</b><span class="soft sm">${fmtD(j.created_at)}</span></div>
+     ${j.learned?`<h4>Ce que j'ai appris</h4><p>${esc(j.learned)}</p>`:''}${j.ideas?`<h4>Mes idées</h4><p>${esc(j.ideas)}</p>`:''}${j.next_steps?`<h4>Prochaines actions</h4><p>${esc(j.next_steps)}</p>`:''}
+     ${ws.length?`<p class="sm">📎 ${ws.map(w=>`<a href="#" data-work="${w.id}">${esc(w.title)}</a>`).join(' · ')}</p>`:''}
+     ${cs.map(c=>`<div class="cm"><b>${esc((d.people[c.author_id]||{}).full_name||'Mentore')}</b> · ${esc(c.body)}</div>`).join('')}
+     ${!self?`<form class="row" data-cform="${j.id}" style="margin-top:10px"><input placeholder="Laisser un commentaire…" style="flex:1;min-width:180px" required><button class="btn sm">Envoyer</button></form>`:''}</article>`}).join('')}</div>`:'<p class="empty">Après chaque rencontre, notez ce que vous avez appris : +'+PTS.journal+' points, et +'+PTS.quick+' en bonus si c\'est dans les 48 h.</p>'}
+   </section>
+
+   <section><div class="sechead"><h2>Travaux déposés</h2>${self?'<button class="btn light sm" id="addwk">+ Déposer un travail</button>':''}</div>
+    ${d.works.length?`<div class="works">${d.works.map(w=>`<a class="wk" href="#" data-work="${w.id}"><span class="ico">${w.kind==='file'?'📄':'🔗'}</span><span class="tt">${esc(w.title)}</span><span class="soft sm">${new Date(w.created_at).toLocaleDateString('fr-FR')}</span></a>`).join('')}</div>`:'<p class="empty">Déposez vos fichiers (PDF, présentations, images) ou vos liens Google Drive, Canva, Notion…</p>'}
+   </section>
+  </div>
+
+  <div class="grid" style="gap:28px">
+   <section><div class="sechead"><h2>Rencontres</h2>${canEdit?'<button class="btn light sm" id="addmt">+ Ajouter</button>':''}</div>
+    <p class="sm soft" style="font-weight:600;margin-bottom:8px">À venir</p>
+    ${up.length?`<ul class="list">${up.map(m=>mtg(m,false)).join('')}</ul>`:'<p class="empty">Aucune rencontre prévue.</p>'}
+    ${past.length?`<p class="sm soft" style="font-weight:600;margin:18px 0 8px">Passées</p><ul class="list">${past.map(m=>mtg(m,true,jByM[m.id])).join('')}</ul>`:''}
+   </section>
+   ${self?`<section><div class="sechead"><h2>Événements privés</h2></div>${ev.length?ev.map(e=>`<div class="card dark ev" style="margin-bottom:12px"><span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content;margin-top:6px" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}</div>`).join(''):'<p class="empty">Pas d\'événement privé à venir.</p>'}</section>`:''}
+   <section><div class="sechead"><h2>Badges</h2><span class="soft sm">${sc.badges.filter(b=>b.ok).length}/${sc.badges.length}</span></div>
+    <div class="badges">${sc.badges.map(b=>`<div class="bdg ${b.ok?'':'off'}" title="${esc(b.t)}"><span class="m" aria-hidden="true">${b.i}</span><b>${esc(b.t)}</b></div>`).join('')}</div>
+   </section>
+  </div>
+ </div></div>`;
+ function mtg(m,isPast,j){return `<li class="mtg ${isPast?'past':''}"><span class="date"><span><b>${day(m.starts_at)}</b><small>${mon(m.starts_at)}</small></span></span><div><b>${esc(m.title)}</b><p class="soft sm">${fmtT(m.starts_at)}–${fmtT(m.ends_at)}${m.location?' · '+esc(m.location):''}${m.mentor_id&&d.people[m.mentor_id]?' · avec '+esc(d.people[m.mentor_id].full_name):''}</p></div><div class="act">${isPast?(j?'<span class="tag ok">Carnet rempli ✓</span>':(self?`<button class="btn sm" data-fill="${m.id}">Remplir mon carnet</button>`:'<span class="tag warn">Carnet à remplir</span>')):(canEdit?`<button class="lnk sm" data-delmt="${m.id}">Supprimer</button>`:'')}</div></li>`}
+ animate();
+ const re=()=>showIncubee(id,from);
+ const bk=$('#bk');if(bk)bk.onclick=()=>from==='admin'?showAdmin():showMentor();
+ app.querySelectorAll('[data-obj]').forEach(c=>c.addEventListener('change',async e=>{const done=c.checked;try{await DB.upd('objectives','id=eq.'+c.dataset.obj,{done,done_at:done?new Date().toISOString():null});if(done){const r=c.getBoundingClientRect();confetti(r.left+12,r.top);toast('+'+PTS.objective+' points · bravo !')}setTimeout(re,done?700:0)}catch(x){toast(x.message);c.checked=!done}}));
+ const sel=$('#stsel');if(sel)sel.onchange=async()=>{try{await DB.rpc('set_incubee_step',{p_incubee:id,p_step:+sel.value});toast('Étape mise à jour');re()}catch(x){toast(x.message)}};
+ $('#addobj').onclick=()=>modal(`<h2>Nouvel objectif</h2>`,`<form id="f"><div class="fld"><label for="ot">Objectif</label><input id="ot" required maxlength="200" placeholder="Ex. : interroger 10 futures clientes"></div><div class="g2"><div class="fld"><label for="os">Étape</label><select id="os">${STEPS.map(s=>`<option value="${s.n}" ${s.n===st?'selected':''}>${s.n}. ${esc(s.t)}</option>`).join('')}</select></div><div class="fld"><label for="od">Échéance (facultatif)</label><input id="od" type="date"></div></div><button class="btn">Ajouter</button></form>`,async()=>{await DB.ins('objectives',{incubee_id:id,step:+$('#os').value,title:$('#ot').value.trim(),due_date:$('#od').value||null});toast('Objectif ajouté');re()});
+ if(self){
+  const openJr=mid=>{const m=d.meetings.find(x=>x.id===mid);modal(`<h2>${m?'Carnet · '+esc(m.title):'Nouveau carnet'}</h2>`,`<form id="f"><p class="soft sm" style="margin-bottom:16px">${m?fmtD(m.starts_at):'Une idée, une lecture, un échange : notez-le.'}</p>
+   <div class="fld"><label for="jl">Ce que j'ai appris</label><textarea id="jl" required maxlength="4000"></textarea></div>
+   <div class="fld"><label for="ji">Mes idées</label><textarea id="ji" maxlength="4000" style="min-height:80px"></textarea></div>
+   <div class="fld"><label for="jn">Prochaines actions</label><textarea id="jn" maxlength="4000" style="min-height:80px"></textarea></div>
+   <div class="fld"><label for="jf">Joindre un fichier (facultatif, 20 Mo max)</label><input id="jf" type="file"></div>
+   <div class="fld"><label for="ju">Ou un lien (facultatif)</label><input id="ju" type="url" placeholder="https://…"></div>
+   <button class="btn">Enregistrer mon carnet</button></form>`,async()=>{const j=await DB.ins('journals',{incubee_id:id,meeting_id:mid||null,learned:$('#jl').value.trim(),ideas:$('#ji').value.trim(),next_steps:$('#jn').value.trim()});await attach($('#jf').files[0],$('#ju').value.trim(),j&&j.id,m?m.title:'Carnet');confetti(innerWidth/2,innerHeight/2);toast('Carnet enregistré · +'+PTS.journal+' points');re()})};
+  app.querySelectorAll('[data-fill]').forEach(b=>b.onclick=()=>openJr(b.dataset.fill));
+  $('#addjr').onclick=()=>openJr(null);
+  $('#addwk').onclick=()=>modal('<h2>Déposer un travail</h2>',`<form id="f"><div class="fld"><label for="wt">Titre</label><input id="wt" required maxlength="160" placeholder="Ex. : Prévisionnel 12 mois"></div><div class="fld"><label for="wf">Fichier (20 Mo max)</label><input id="wf" type="file"></div><div class="fld"><label for="wu">Ou un lien</label><input id="wu" type="url" placeholder="https://drive.google.com/…"></div><button class="btn">Déposer</button></form>`,async()=>{const f=$('#wf').files[0],u=$('#wu').value.trim();if(!f&&!u)throw new Error('Ajoutez un fichier ou un lien.');await attach(f,u,null,$('#wt').value.trim());toast('Travail déposé · +'+PTS.work+' points');re()});
+  const p=new URLSearchParams(location.search).get('carnet');if(p&&todo.find(m=>m.id===p))openJr(p);
+ }
+ async function attach(file,url,jid,title){if(file){if(file.size>20*1024*1024)throw new Error('Fichier trop lourd (20 Mo max).');const safe=file.name.normalize('NFD').replace(/[^\w.\-]+/g,'_').slice(-80);const path=id+'/'+Date.now()+'-'+safe;await DB.upload(path,file);await DB.ins('works',{incubee_id:id,journal_id:jid,title:title||file.name,kind:'file',storage_path:path})}
+  if(url){if(!/^https?:\/\//.test(url))throw new Error('Le lien doit commencer par https://');await DB.ins('works',{incubee_id:id,journal_id:jid,title:title||url,kind:'link',url})}}
+ app.querySelectorAll('[data-work]').forEach(a=>a.onclick=async e=>{e.preventDefault();const w=d.works.find(x=>x.id===a.dataset.work);if(!w)return;try{const u=w.kind==='file'?await DB.signed(w.storage_path):w.url;if(/^https?:\/\//.test(u))window.open(u,'_blank','noopener')}catch(x){toast(x.message)}});
+ app.querySelectorAll('[data-cform]').forEach(f=>f.onsubmit=async e=>{e.preventDefault();const i=f.querySelector('input');try{await DB.ins('comments',{incubee_id:id,author_id:ME.id,target_type:'journal',target_id:f.dataset.cform,body:i.value.trim()});toast('Commentaire envoyé');re()}catch(x){toast(x.message)}});
+ if(canEdit){$('#addmt').onclick=()=>meetingForm(id,d.mentors,re);app.querySelectorAll('[data-delmt]').forEach(b=>b.onclick=async()=>{if(!confirm('Supprimer cette rencontre ?'))return;await DB.del('meetings','id=eq.'+b.dataset.delmt);re()})}
+}
+
+function meetingForm(incId,mentors,done){
+ const dflt=new Date(Date.now()+864e5);dflt.setMinutes(0);
+ const loc=x=>new Date(x.getTime()-x.getTimezoneOffset()*6e4).toISOString().slice(0,16);
+ modal('<h2>Nouvelle rencontre</h2>',`<form id="f"><div class="fld"><label for="mtt">Titre</label><input id="mtt" required maxlength="160" value="Point mentorat"></div>
+  <div class="g2"><div class="fld"><label for="mts">Début</label><input id="mts" type="datetime-local" required value="${loc(dflt)}"></div><div class="fld"><label for="mtd">Durée</label><select id="mtd"><option value="30">30 min</option><option value="60" selected>1 h</option><option value="90">1 h 30</option><option value="120">2 h</option></select></div></div>
+  <div class="fld"><label for="mtl">Lieu ou lien visio</label><input id="mtl" maxlength="300" placeholder="Google Meet, adresse…"></div>
+  ${ME.role==='admin'&&mentors.length?`<div class="fld"><label for="mtm">Avec</label><select id="mtm"><option value="">L'équipe Quelqu'UNE</option>${mentors.map(m=>`<option value="${m.id}">${esc(m.full_name)}</option>`).join('')}</select></div>`:''}
+  <p class="soft sm" style="margin-bottom:16px">À la fin de la rencontre, l'incubée reçoit automatiquement un e-mail pour remplir son carnet.</p>
+  <button class="btn">Ajouter la rencontre</button></form>`,async()=>{const s=new Date($('#mts').value);const e=new Date(s.getTime()+(+$('#mtd').value)*6e4);const mm=$('#mtm');
+  await DB.ins('meetings',{incubee_id:incId,mentor_id:ME.role==='mentor'?ME.id:(mm&&mm.value)||null,title:$('#mtt').value.trim(),starts_at:s.toISOString(),ends_at:e.toISOString(),location:$('#mtl').value.trim()||null,source:'manual'});toast('Rencontre ajoutée');done()});
+}
+
+/* --- Vue mentore --- */
+async function showMentor(){
+ VIEW={t:'mentor'};app.innerHTML='<div class="loading"><img src="img/q-brun.png" alt="Chargement"></div>';
+ const ms=await DB.get('mentorships','mentor_id=eq.'+ME.id);const ids=ms.map(m=>m.incubee_id);
+ const data=await Promise.all(ids.map(loadIncubee));
+ app.innerHTML=`<div class="wrap reveal"><div class="card dark sec hello"><h1>Bonjour ${esc(first(ME.full_name))} !</h1><p class="soft">Vous accompagnez ${ids.length} incubée${ids.length>1?'s':''}. Suivez leur progression, commentez leurs carnets et planifiez vos rencontres.</p></div>
+ <section class="sec"><div class="sechead"><h2>Mes incubées</h2></div>${data.length?`<div class="incs">${data.map(card).join('')}</div>`:'<p class="empty">Aucune incubée ne vous est encore attribuée.</p>'}</section>${await evBlock()}</div>`;
+ animate();app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>showIncubee(b.dataset.open,'mentor'));
+}
+function card(d){const sc=score(d);const now=Date.now();const todo=d.meetings.filter(m=>new Date(m.ends_at)<now&&!d.journals.some(j=>j.meeting_id===m.id)).length;const nxt=d.meetings.find(m=>new Date(m.starts_at)>now);const st=d.profile.current_step||1;
+ return `<button class="card inc" data-open="${d.profile.id}"><div class="hd"><span class="av">${esc(initials(d.profile.full_name))}</span><div><h3>${esc(d.profile.full_name)}</h3><p class="soft sm">${esc(d.profile.project_name||'')}</p></div></div>
+ <p class="sm"><b>Étape ${st}</b> · ${esc(STEPS[st-1].t)}</p><div class="mini"><i style="width:${Math.round(((st-1)*100+ (d.objectives.filter(o=>o.step===st).length?d.objectives.filter(o=>o.step===st&&o.done).length/d.objectives.filter(o=>o.step===st).length*100:0))/4)}%"></i></div>
+ <p class="soft sm">${sc.pts} pts · niveau ${esc(sc.lvl.n)} · ${sc.doneN}/${sc.totN} objectifs</p>
+ <div class="row" style="margin-top:10px">${todo?`<span class="tag warn">${todo} carnet${todo>1?'s':''} à remplir</span>`:'<span class="tag ok">Carnets à jour</span>'}${nxt?`<span class="tag">Prochaine : ${new Date(nxt.starts_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</span>`:''}</div></button>`}
+async function evBlock(){let ev=[];try{ev=await DB.get('private_events','order=starts_at.asc')}catch(e){}ev=ev.filter(e=>new Date(e.ends_at||e.starts_at)>Date.now()-6*3600e3);if(!ev.length)return'';return `<section class="sec"><div class="sechead"><h2>Événements privés</h2></div><div class="incs">${ev.map(e=>`<div class="card dark ev"><span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}${ME.role==='admin'?`<button class="lnk" style="color:#f0dcb6;width:max-content" data-evedit="${e.id}">Modifier le lien</button>`:''}</div>`).join('')}</div></section>`}
+
+/* --- Vue administratrice --- */
+async function showAdmin(tab='inc'){
+ VIEW={t:'admin'};app.innerHTML='<div class="loading"><img src="img/q-brun.png" alt="Chargement"></div>';
+ const [ps,ms]=await Promise.all([DB.get('profiles','order=full_name.asc'),DB.get('mentorships','')]);
+ const incs=ps.filter(p=>p.role==='incubee'),mens=ps.filter(p=>p.role==='mentor');
+ const data=await Promise.all(incs.map(p=>loadIncubee(p.id)));
+ const mentorsOf=id=>ms.filter(m=>m.incubee_id===id).map(m=>ps.find(p=>p.id===m.mentor_id)).filter(Boolean);
+ app.innerHTML=`<div class="wrap reveal"><div class="card dark sec hello"><h1>Bonjour ${esc(first(ME.full_name))} !</h1><p class="soft">${incs.length} incubée${incs.length>1?'s':''} · ${mens.length} mentore${mens.length>1?'s':''}. Toute la promotion d'un coup d'œil.</p></div>
+ <div class="tabs" role="tablist"><button class="tab" role="tab" data-tab="inc" aria-selected="${tab==='inc'}">Incubées</button><button class="tab" role="tab" data-tab="acc" aria-selected="${tab==='acc'}">Comptes et mentores</button><button class="tab" role="tab" data-tab="ev" aria-selected="${tab==='ev'}">Événements privés</button></div>
+ <div id="tp"></div></div>`;
+ const tp=$('#tp');
+ if(tab==='inc'){tp.innerHTML=data.length?`<div class="incs sec">${data.map(card).join('')}</div>`:'<p class="empty sec">Aucune incubée. Créez les comptes dans l\'onglet « Comptes et mentores ».</p>';tp.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>showIncubee(b.dataset.open,'admin'))}
+ if(tab==='acc'){tp.innerHTML=`<section class="sec card"><div class="sechead"><h2>Créer un compte</h2></div><form id="cf"><div class="g2"><div class="fld"><label for="cn">Prénom et nom</label><input id="cn" required></div><div class="fld"><label for="ce">E-mail</label><input id="ce" type="email" required></div></div>
+   <div class="g2"><div class="fld"><label for="cr">Rôle</label><select id="cr"><option value="incubee">Incubée</option><option value="mentor">Mentore</option><option value="admin">Équipe Quelqu'UNE (admin)</option></select></div><div class="fld"><label for="cp">Projet (incubées)</label><input id="cp"></div></div>
+   <div class="fld"><label for="cs">Secteur (incubées)</label><input id="cs" placeholder="Ex. : AgriTech, intelligence artificielle"></div>
+   <button class="btn" id="cb">Créer le compte</button></form><div id="cres"></div></section>
+   <section class="sec card"><div class="sechead"><h2>Comptes</h2></div><div style="overflow:auto"><table><thead><tr><th>Nom</th><th>Rôle</th><th>Projet</th><th>Mentores</th><th></th></tr></thead><tbody>${ps.filter(p=>p.role!=='none'||true).map(p=>`<tr><td><b>${esc(p.full_name||'—')}</b><br><span class="soft sm">${esc(p.email||'')}</span></td><td>${{admin:'Admin',incubee:'Incubée',mentor:'Mentore',none:'Sans accès'}[p.role]}</td><td>${esc(p.project_name||'')}</td>
+   <td>${p.role==='incubee'?mentorsOf(p.id).map(m=>`<span class="tag" style="margin:0 4px 4px 0">${esc(m.full_name)} <button class="lnk sm" data-unlink="${m.id}|${p.id}" aria-label="Retirer">×</button></span>`).join('')+(mens.length?`<select data-link="${p.id}" style="width:auto;padding:6px 8px;font-size:14px;margin-top:4px"><option value="">+ Attribuer…</option>${mens.filter(m=>!mentorsOf(p.id).includes(m)).map(m=>`<option value="${m.id}">${esc(m.full_name)}</option>`).join('')}</select>`:''):''}</td>
+   <td style="white-space:nowrap">${p.id!==ME.id?`<button class="lnk sm" data-reset="${p.id}">Nouveau mot de passe</button><br><button class="lnk sm" data-del="${p.id}" style="color:#9b3b2a">Supprimer</button>`:''}</td></tr>`).join('')}</tbody></table></div></section>`;
+  $('#cf').onsubmit=async e=>{e.preventDefault();const b=$('#cb');b.disabled=true;const NM=$('#cn').value.trim();try{const r=await DB.rpc('admin_create_user',{p_email:$('#ce').value.trim(),p_full_name:$('#cn').value.trim(),p_role:$('#cr').value,p_project:$('#cp').value.trim()||null,p_sector:$('#cs').value.trim()||null});
+   modal('<h2>Compte créé</h2>',`<p>Transmettez ces identifiants à <b>${esc(NM)}</b>. Le mot de passe ne sera plus affiché ensuite : elle pourra le changer une fois connectée.</p><p style="margin:16px 0 6px" class="sm soft">Adresse de connexion</p><p><b>quelquune.com/espace-incubateur/</b></p><p style="margin:16px 0 6px" class="sm soft">Identifiant</p><p><b>${esc(r.email)}</b></p><p style="margin:16px 0 6px" class="sm soft">Mot de passe provisoire</p><p class="pw">${esc(r.password)}</p><div class="row" style="margin-top:20px"><button class="btn" id="cpy">Copier le message</button></div>`,null,()=>{$('#cpy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(`Bonjour ${first(NM)},\n\nVotre espace incubateur Quelqu'UNE est prêt : https://quelquune.com/espace-incubateur/\nIdentifiant : ${r.email}\nMot de passe provisoire : ${r.password}\n\nVous pourrez le changer une fois connectée (lien « Mot de passe » en haut de la page).\n\nÀ très vite,\nL'équipe Quelqu'UNE`).then(()=>toast('Message copié'))}});
+   e.target.reset()}catch(x){toast(x.message)}finally{b.disabled=false;showAdminSoon('acc')}};
+  tp.querySelectorAll('[data-link]').forEach(s=>s.onchange=async()=>{if(!s.value)return;try{await DB.ins('mentorships',{mentor_id:s.value,incubee_id:s.dataset.link});toast('Mentore attribuée');showAdmin('acc')}catch(x){toast(x.message)}});
+  tp.querySelectorAll('[data-unlink]').forEach(b=>b.onclick=async()=>{const[m,i]=b.dataset.unlink.split('|');await DB.del('mentorships','mentor_id=eq.'+m+'&incubee_id=eq.'+i);showAdmin('acc')});
+  tp.querySelectorAll('[data-reset]').forEach(b=>b.onclick=async()=>{if(!confirm('Générer un nouveau mot de passe provisoire ? L\'ancien ne fonctionnera plus.'))return;try{const r=await DB.rpc('admin_reset_password',{p_user:b.dataset.reset});modal('<h2>Nouveau mot de passe</h2>',`<p>Mot de passe provisoire à transmettre :</p><p class="pw" style="margin-top:12px">${esc(r.password)}</p>`)}catch(x){toast(x.message)}});
+  tp.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm('Supprimer définitivement ce compte et toutes ses données (objectifs, carnets, travaux) ? Cette action est irréversible.'))return;try{await DB.rpc('admin_delete_user',{p_user:b.dataset.del});toast('Compte supprimé');showAdmin('acc')}catch(x){toast(x.message)}});
+ }
+ if(tab==='ev'){tp.innerHTML=(await evBlock())||'<p class="empty sec">Aucun événement privé à venir.</p>';tp.insertAdjacentHTML('beforeend','<p class="sec"><button class="btn light" id="addev">+ Ajouter un événement privé</button></p>');
+  tp.querySelectorAll('[data-evedit]').forEach(b=>b.onclick=async()=>{const u=prompt('Lien de connexion (https://…) :');if(u===null)return;if(u&&!/^https:\/\//.test(u)){toast('Le lien doit commencer par https://');return}await DB.upd('private_events','id=eq.'+b.dataset.evedit,{join_url:u||null});toast('Lien enregistré');showAdmin('ev')});
+  $('#addev').onclick=()=>{const loc=x=>new Date(x.getTime()-x.getTimezoneOffset()*6e4).toISOString().slice(0,16);modal('<h2>Événement privé</h2>',`<form id="f"><div class="fld"><label for="et">Titre</label><input id="et" required></div><div class="fld"><label for="ed">Description</label><textarea id="ed" style="min-height:80px"></textarea></div><div class="g2"><div class="fld"><label for="es">Début</label><input id="es" type="datetime-local" required value="${loc(new Date(Date.now()+7*864e5))}"></div><div class="fld"><label for="eu">Lien de connexion</label><input id="eu" type="url" placeholder="https://…"></div></div><div class="fld"><label>Ouvert à</label><label class="row" style="font-weight:400"><input type="checkbox" id="ai" checked style="width:auto"> Incubées</label><label class="row" style="font-weight:400"><input type="checkbox" id="am" checked style="width:auto"> Mentores</label></div><button class="btn">Ajouter</button></form>`,async()=>{const a=['admin'];if($('#ai').checked)a.push('incubee');if($('#am').checked)a.push('mentor');const u=$('#eu').value.trim();if(u&&!/^https:\/\//.test(u))throw new Error('Le lien doit commencer par https://');await DB.ins('private_events',{title:$('#et').value.trim(),description:$('#ed').value.trim()||null,starts_at:new Date($('#es').value).toISOString(),join_url:u||null,audience:a});toast('Événement ajouté');showAdmin('ev')})}}
+ app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showAdmin(b.dataset.tab));
+}
+let _sa=null;function showAdminSoon(t){clearTimeout(_sa);_sa=setTimeout(()=>{if(!$('#dlg').open)showAdmin(t);else $('#dlg').addEventListener('close',()=>showAdmin(t),{once:true})},300)}
+
+/* --- Modale générique --- */
+function modal(head,body,onSubmit,after){const dl=$('#dlg');$('#dlgin').innerHTML=`<div class="hd">${head}<button class="x" type="button" aria-label="Fermer" id="dx">×</button></div>${body}`;
+ $('#dx').onclick=()=>dl.close();dl.showModal();const f=$('#dlgin').querySelector('form');
+ if(f&&onSubmit)f.onsubmit=async e=>{e.preventDefault();if(!f.checkValidity()){f.reportValidity();return}const b=f.querySelector('button.btn');b.disabled=true;try{await onSubmit();dl.close()}catch(x){toast(x.message);b.disabled=false}};
+ if(after)after()}
+$('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()});
+
+/* --- Mot de passe / déconnexion --- */
+$('#logout').onclick=()=>{S=null;saveS();renderLogin()};
+$('#pwbtn').onclick=()=>modal('<h2>Changer mon mot de passe</h2>',`<form id="f"><div class="fld"><label for="np">Nouveau mot de passe (8 caractères minimum)</label><input id="np" type="password" minlength="8" required autocomplete="new-password"></div><div class="fld"><label for="np2">Confirmer</label><input id="np2" type="password" minlength="8" required autocomplete="new-password"></div><button class="btn">Enregistrer</button></form>`,async()=>{if($('#np').value!==$('#np2').value)throw new Error('Les deux mots de passe ne correspondent pas.');await DB.setPassword($('#np').value);toast('Mot de passe modifié')});
+
+boot();
+})();
+</script>
+</body>
+</html>

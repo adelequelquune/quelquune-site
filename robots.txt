@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /connexion/
 Disallow: /espace-membre/
+Disallow: /espace-incubateur/
 
 Sitemap: https://quelquune.com/sitemap.xml
