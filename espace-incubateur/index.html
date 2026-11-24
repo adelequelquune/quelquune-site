@@ -188,6 +188,7 @@ footer{margin-top:56px;padding:28px 0;border-top:1px solid var(--line);font-size
 const SB='https://udglemrdxabpzedqnkml.supabase.co';
 const KEY='sb_publishable_WO3vCjmobkHBFIIWVC9xyw_xI_xauOB';
 const DEMO=new URLSearchParams(location.search).has('demo');
+const ROLEQ=new URLSearchParams(location.search).get('role');
 const STEPS=[
  {n:1,t:'Valider le besoin',d:'Interroger ses futures clientes et confirmer le problème.'},
  {n:2,t:'Bâtir une offre qui se vend',d:'Prix, proposition de valeur, premières ventes.'},
@@ -300,8 +301,8 @@ function renderLogin(msg){
  VIEW=null;ME=null;setWho();
  app.innerHTML=`<div class="login"><form class="card reveal" id="lf" novalidate>
   <div class="lock" id="lock"><svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path class="shackle" d="M10 14V10a6 6 0 0 1 12 0v4"/><rect x="7" y="14" width="18" height="13" rx="3"/><circle cx="16" cy="20.5" r="1.6" fill="currentColor"/></svg></div>
-  <h1 style="font-size:34px">Espace incubateur</h1>
-  <p class="soft" style="margin:10px 0 24px">Réservé aux incubées, aux mentores et à l'équipe Quelqu'UNE.</p>
+  <h1 style="font-size:34px">${ROLEQ==='mentor'?'Espace mentore':ROLEQ==='incubee'?'Espace incubée':'Espace incubateur'}</h1>
+  <p class="soft" style="margin:10px 0 24px">${ROLEQ==='mentor'?'Suivez la progression de vos incubées, leurs carnets et vos rencontres.':ROLEQ==='incubee'?'Votre parcours, vos objectifs, vos rencontres et vos travaux.':'Réservé aux incubées, aux mentores et à l\'équipe Quelqu\'UNE.'}</p>
   ${msg?`<p class="err">${esc(msg)}</p>`:''}<p class="err" id="lerr" hidden></p>
   <div class="fld"><label for="le">Adresse e-mail</label><input id="le" type="email" autocomplete="username" required></div>
   <div class="fld"><label for="lp">Mot de passe</label><input id="lp" type="password" autocomplete="current-password" required></div>
