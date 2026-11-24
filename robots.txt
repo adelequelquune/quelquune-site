@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /connexion/
+Disallow: /espace-membre/
 
 Sitemap: https://quelquune.com/sitemap.xml
