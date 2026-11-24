@@ -733,6 +733,19 @@ footer a{display:inline-block;transform-origin:0 50%}
 @media(max-width:860px){.fd{grid-template-columns:minmax(0,1fr)}.fdpic{max-width:320px}}
 .proj .blur{filter:blur(7px);user-select:none;-webkit-user-select:none;opacity:.85}
 .proj .who.blur{filter:blur(5px)}
+.qev{margin-top:46px;display:grid;gap:38px}.qev h2{font-family:inherit;font-size:clamp(24px,3vw,32px);margin-bottom:16px}
+.qevc{display:grid;gap:12px;padding:26px;background:var(--paper);border:1px solid var(--line);border-radius:6px}
+.qevc.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}.qevc.dark a{color:#f0dcb6}
+.qevc .when{font-weight:600;color:var(--toffee)}.qevc.dark .when{color:#d9c3a0}
+.qpre{background:#f3ece1;border-left:4px solid var(--cocoa);padding:12px 16px;border-radius:2px;color:var(--ink)}.qpre a{color:var(--cocoa);font-weight:600}
+.qseats{font-weight:600}.qfull{color:#9a3b2a;font-weight:600}
+.qzoom{display:grid;gap:6px;font-size:15px}.qzoom b{font-family:"Courier New",monospace;letter-spacing:.04em}
+.qpw{margin-top:28px}
+.qdlg{border:0;border-radius:8px;padding:0;max-width:min(520px,calc(100vw - 32px));width:100%;background:var(--paper);color:var(--ink);box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
+.qdlg::backdrop{background:rgba(46,31,20,.55)}.qdlg form{display:grid;gap:14px;padding:28px}
+.qdlg label{font-weight:600;font-size:14px}.qdlg input[type=text],.qdlg input[type=email],.qdlg input[type=password]{width:100%;min-height:46px;padding:0 14px;border:1px solid var(--line);border-radius:3px;background:#fff;font:inherit}
+.qdlg input[readonly]{background:#efe7da;color:var(--soft)}.qdlg .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400}.qdlg .chk input{margin-top:4px;width:18px;height:18px;flex:none}
+.qdlg .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}.qdlg .err{color:#9a3b2a;font-weight:600;min-height:1em}
 /*QM-CSS*/
 /* ===== COUCHE DIRECTION ARTISTIQUE & MOUVEMENT (additive, ne modifie pas la structure) ===== */
 :root{--sand:#B6A489;--sand-l:#d9cbb4;--sand-d:#8f7d62;--ease:cubic-bezier(.22,1,.36,1);--lift:0 26px 44px -22px rgba(46,31,20,.42),0 2px 6px rgba(46,31,20,.06)}
@@ -1298,6 +1311,9 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
         <a class="spc" href="https://billing.stripe.com/p/login/28EaEW5cG3h6cLdgRCdQQ00" target="_blank" rel="noopener"><span class="ic" data-i="case"></span><h3>Mon abonnement</h3><p>Factures, carte bancaire, résiliation&nbsp;: tout se gère sur Stripe.</p><span class="ulink">Gérer mon abonnement</span></a>
         <div class="spc"><span class="ic" data-i="gift"></span><h3>Une question&nbsp;?</h3><p>L'équipe du Qlub vous répond à <span class="nw">qlub@quelquune.com</span>.</p></div>
       </div>
+      <div id="qev" class="qev"></div>
+      <p class="qpw"><button type="button" class="linkbtn" id="chpw">Changer mon mot de passe</button></p>
+      <dialog id="qdlg" class="qdlg"><form method="dialog" id="qdf"></form></dialog>
     </div>
   </div>
 </section>
@@ -1842,11 +1858,51 @@ if(EMBED&&!isOpen()){const pb=document.getElementById('prebtn'),pe=document.getE
    AUTH.configured passe à true quand l'outil de comptes (ex. Supabase) est branché :
    signIn vérifie alors l'identifiant et le mot de passe côté serveur.
    Tant qu'il ne l'est pas, seul le compte de démonstration ouvre l'aperçu (aucune donnée réelle). */
-const AUTH={configured:false,
-  async signIn(id,pw){
-    if(!this.configured){if(!/(^|\.)quelquune\.com$/.test(location.hostname)&&id==='demo@quelquune.com'&&pw==='Qlub2026')return{email:id,name:'Membre démo',demo:true};throw new Error(id==='demo@quelquune.com'?'bad':'soon')}
-    throw new Error('bad')},
+const SB={url:'https://udglemrdxabpzedqnkml.supabase.co',key:'sb_publishable_WO3vCjmobkHBFIIWVC9xyw_xI_xauOB'};
+const AUTH={configured:true,
+  async token(body,grant){const r=await fetch(SB.url+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('bad');return j},
+  async signIn(id,pw){const t=await this.token({email:id,password:pw},'password');
+    const me=await (await fetch(SB.url+'/rest/v1/rpc/qlub_me',{method:'POST',headers:{apikey:SB.key,Authorization:'Bearer '+t.access_token,'Content-Type':'application/json'},body:'{}'})).json();
+    if(!me||!['member','admin'].includes(me.role)){if(me&&['incubee','mentor'].includes(me.role))throw new Error('incub');throw new Error('notmember')}
+    return{email:me.email,name:me.full_name||'',role:me.role,at:t.access_token,rt:t.refresh_token,exp:Date.now()+(t.expires_in||3600)*1000-60000}},
   async signOut(){}};
+const QEV={
+  async api(path,body){if(!sess||!sess.at)throw new Error('session');
+    if(Date.now()>sess.exp){try{const t=await AUTH.token({refresh_token:sess.rt},'refresh_token');save({...sess,at:t.access_token,rt:t.refresh_token,exp:Date.now()+(t.expires_in||3600)*1000-60000})}catch(e){save(null);paint();QROUTE.go('connexion');throw e}}
+    const r=await fetch(SB.url+path,{method:body===undefined?'GET':(path.startsWith('/auth/')?'PUT':'POST'),headers:{apikey:SB.key,Authorization:'Bearer '+sess.at,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});
+    const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&(j.message||j.msg))||'Erreur, réessayez.');return j},
+  esc:t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
+  when(e){const d=new Date(e.starts_at);return d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',timeZone:'Europe/Paris'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Paris'}).replace(':',' h ')},
+  async render(){const box=document.getElementById('qev');if(!box||!sess||sess.demo){if(box)box.innerHTML='';return}
+    let ev=[];try{ev=await this.api('/rest/v1/rpc/qlub_events',{})||[]}catch(e){box.innerHTML='';return}
+    const E=this.esc,mine=ev.filter(e=>e.registered),open=ev.filter(e=>!e.registered&&new Date(e.starts_at)>Date.now());
+    const ins=mine.length?mine.map(e=>`<div class="qevc dark"><span class="when">${E(this.when(e))}</span><h3>${E(e.title)}</h3>${e.prerequisite_html?`<p class="qpre">${e.prerequisite_html}</p>`:''}${e.join_url?`<div class="qzoom"><a class="btn main" style="width:max-content;background:#f0dcb6;color:var(--ink)" href="${E(e.join_url)}" target="_blank" rel="noopener">Rejoindre la réunion Zoom</a><span>ID de réunion : <b>${E(e.zoom_id||'')}</b></span><span>Code secret : <b>${E(e.zoom_code||'')}</b></span></div>`:'<p>Le lien de connexion apparaîtra ici avant l\'événement.</p>'}</div>`).join(''):'<p class="soft">Vous n\'êtes inscrite à aucun événement pour le moment.</p>';
+    const op=open.map(e=>{const full=e.seats_left<=0&&sess.role!=='admin';return `<div class="qevc"><span class="when">${E(this.when(e))} · en ligne</span><h3>${E(e.title)}</h3>${e.description?`<p>${E(e.description)}</p>`:''}${e.prerequisite_html?`<p class="qpre">${e.prerequisite_html}</p>`:''}<p class="${full?'qfull':'qseats'}">${full?'Complet : les '+e.qlub_capacity+' places sont prises.':(e.seats_left+' place'+(e.seats_left>1?'s':'')+' restante'+(e.seats_left>1?'s':'')+' sur '+e.qlub_capacity+', réservées aux membres du Qlub')}</p>${full||sess.role==='admin'?'':`<button type="button" class="btn main" style="width:max-content" data-reg="${E(e.id)}" data-t="${E(e.title)}">Je m'inscris</button>`}</div>`}).join('');
+    box.innerHTML=`<section><h2>Événements inscrits</h2><div style="display:grid;gap:16px">${ins}</div></section>${op?`<section><h2>Événements réservés aux membres</h2><div style="display:grid;gap:16px">${op}</div></section>`:''}`;
+    box.querySelectorAll('[data-reg]').forEach(b=>b.onclick=()=>this.form(b.dataset.reg,b.dataset.t))},
+  form(id,title){const d=document.getElementById('qdlg'),f=document.getElementById('qdf'),E=this.esc,n=(sess.name||'').trim().split(/\s+/);const fn=n.shift()||'',ln=n.join(' ');
+    f.innerHTML=`<h2 style="font-size:24px">Je m'inscris</h2><p class="soft">${E(title)}</p><p class="soft sm">Vérifiez vos informations : elles serviront à votre inscription et à l'e-mail de confirmation.</p>
+    <div><label for="qfn">Prénom</label><input type="text" id="qfn" value="${E(fn)}" required autocomplete="given-name"></div>
+    <div><label for="qln">Nom</label><input type="text" id="qln" value="${E(ln)}" required autocomplete="family-name"></div>
+    <div><label for="qem">E-mail</label><input type="email" id="qem" value="${E(sess.email)}" readonly></div>
+    <label class="chk"><input type="checkbox" id="qok" required> <span>Je confirme que ces informations sont exactes.</span></label>
+    <p class="qpre">Avant l'atelier, il est indispensable de renseigner vos besoins et vos compétences sur <a href="https://www.networthink.com" target="_blank" rel="noopener">www.networthink.com</a>.</p>
+    <p class="err" id="qerr" role="alert"></p><div class="row"><button type="button" class="btn line" id="qcan">Annuler</button><button type="submit" class="btn main" id="qgo">Confirmer mon inscription</button></div>`;
+    d.showModal();document.getElementById('qcan').onclick=()=>d.close();
+    f.onsubmit=async ev=>{ev.preventDefault();const er=document.getElementById('qerr'),go=document.getElementById('qgo');er.textContent='';
+      if(!document.getElementById('qok').checked){er.textContent='Cochez la case pour confirmer vos informations.';return}
+      go.disabled=true;go.textContent='Inscription…';
+      try{await this.api('/rest/v1/rpc/register_event',{p_event:id,p_first:document.getElementById('qfn').value,p_last:document.getElementById('qln').value});
+        f.innerHTML=`<h2 style="font-size:24px">C'est confirmé !</h2><p>Votre inscription est enregistrée. Un e-mail de confirmation part vers <b>${E(sess.email)}</b>.</p><p class="qpre">N'oubliez pas : renseignez vos besoins et vos compétences sur <a href="https://www.networthink.com" target="_blank" rel="noopener">www.networthink.com</a> avant l'atelier.</p><div class="row"><button class="btn main" value="ok">Fermer</button></div>`;f.onsubmit=null;this.render()}
+      catch(x){er.textContent=x.message;go.disabled=false;go.textContent='Confirmer mon inscription'}}},
+  pw(){const d=document.getElementById('qdlg'),f=document.getElementById('qdf');
+    f.innerHTML=`<h2 style="font-size:24px">Changer mon mot de passe</h2><div><label for="qp1">Nouveau mot de passe (8 caractères minimum)</label><input type="password" id="qp1" minlength="8" required autocomplete="new-password"></div><div><label for="qp2">Confirmez-le</label><input type="password" id="qp2" minlength="8" required autocomplete="new-password"></div><p class="err" id="qerr" role="alert"></p><div class="row"><button type="button" class="btn line" id="qcan">Annuler</button><button type="submit" class="btn main" id="qgo">Enregistrer</button></div>`;
+    d.showModal();document.getElementById('qcan').onclick=()=>d.close();
+    f.onsubmit=async ev=>{ev.preventDefault();const a=document.getElementById('qp1').value,b=document.getElementById('qp2').value,er=document.getElementById('qerr');
+      if(a.length<8){er.textContent='8 caractères minimum.';return}if(a!==b){er.textContent='Les deux mots de passe sont différents.';return}
+      try{await this.api('/auth/v1/user',{password:a});f.innerHTML='<h2 style="font-size:24px">Mot de passe modifié</h2><p>Utilisez-le dès votre prochaine connexion.</p><div class="row"><button class="btn main" value="ok">Fermer</button></div>';f.onsubmit=null}catch(x){er.textContent=x.message}}}
+};
+document.getElementById('chpw').addEventListener('click',()=>QEV.pw());
 const SK='qlub-session';let sess=null;
 try{sess=JSON.parse(sessionStorage.getItem(SK)||'null')}catch(e){}
 const save=v=>{sess=v;try{v?sessionStorage.setItem(SK,JSON.stringify(v)):sessionStorage.removeItem(SK)}catch(e){}};
@@ -1854,7 +1910,7 @@ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const big=document.getElementById('biglock'),st=document.getElementById('lockstate'),hl=document.getElementById('hlogin'),ht=document.getElementById('hltxt');
 const paint=()=>{const on=!!sess;hl.classList.toggle('on',on);hl.href=on?QROUTE.ROUTES.espace:QROUTE.ROUTES.connexion;ht.textContent=on?'Mon espace':'Se connecter';const mo=document.getElementById('mologin');mo.href=on?QROUTE.ROUTES.espace:QROUTE.ROUTES.connexion;mo.lastChild.textContent=on?'Mon espace':'Se connecter';mo.classList.toggle('on',on);
   big.classList.toggle('open',on);st.textContent=on?'Espace déverrouillé':'Espace réservé aux membres du Qlub';
-  if(on){document.getElementById('hello').textContent='Bonjour, '+(sess.name||'').split(' ')[0];document.getElementById('demobar').hidden=!sess.demo}};
+  if(on){document.getElementById('hello').textContent='Bonjour, '+(sess.name||'').split(' ')[0];document.getElementById('demobar').hidden=!sess.demo;QEV.render()}};
 const guard=()=>{const h=QROUTE.cur();if(h==='espace'&&!sess)QROUTE.go('connexion',true);else if(h==='connexion'&&sess)QROUTE.go('espace',true);
   hl.setAttribute('aria-current',(h==='connexion'||h==='espace')?'page':'false');if(!(h==='connexion'||h==='espace'))hl.removeAttribute('aria-current')};
 addEventListener('pagechange',guard);paint();guard();
@@ -1870,7 +1926,7 @@ lf.addEventListener('submit',async e=>{e.preventDefault();er.textContent='';nt.h
   bt.disabled=true;bt.lastChild.textContent='Connexion…';
   try{const u=await AUTH.signIn(id,pw);save(u);upw.value='';paint();st.textContent='Bienvenue dans le Qlub';
     setTimeout(()=>{QROUTE.go('espace')},RM?0:900)}
-  catch(err){if(err.message==='soon'){note('Les comptes membres s\'ouvrent avec le lancement de l\'espace membre. Vos identifiants vous seront envoyés par e-mail après votre adhésion.<a class="ulink" href="https://billing.stripe.com/p/login/28EaEW5cG3h6cLdgRCdQQ00" target="_blank" rel="noopener">En attendant, gérer mon abonnement</a>')}
+  catch(err){if(err.message==='incub'){note('Ce compte donne accès à l\'espace incubateur.<a class="ulink" href="/espace-incubateur/">Aller à l\'espace incubateur</a>')}else if(err.message==='notmember'){note('Ce compte n\'est pas encore rattaché au Qlub. Écrivez-nous à <b class="nw">qlub@quelquune.com</b>.')}else if(err.message==='soon'){note('Les comptes membres s\'ouvrent avec le lancement de l\'espace membre. Vos identifiants vous seront envoyés par e-mail après votre adhésion.<a class="ulink" href="https://billing.stripe.com/p/login/28EaEW5cG3h6cLdgRCdQQ00" target="_blank" rel="noopener">En attendant, gérer mon abonnement</a>')}
     else{upw.setAttribute('aria-invalid','true');fail('Identifiant ou mot de passe incorrect.')}}
   finally{bt.disabled=false;bt.lastChild.textContent='Se connecter'}});
 document.getElementById('logout').addEventListener('click',async()=>{await AUTH.signOut();save(null);paint();QROUTE.go('connexion')});
