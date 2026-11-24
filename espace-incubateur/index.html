@@ -195,6 +195,9 @@ const STEPS=[
  {n:3,t:'Organiser ses finances',d:'Budget, prévisionnel, statut juridique.'},
  {n:4,t:'Convaincre financeurs et partenaires',d:'Pitch, dossier de financement, réseau.'}];
 const LEVELS=[{min:0,n:'Graine'},{min:100,n:'Pousse'},{min:250,n:'Bâtisseuse'},{min:500,n:'Ambassadrice'},{min:800,n:'Pionnière'}];
+const evEnd=e=>new Date(e.ends_at||new Date(new Date(e.starts_at).getTime()+2*3600e3));
+const evState=e=>{const n=Date.now();return n>=evEnd(e)?'ended':n>=new Date(e.starts_at)?'live':'next'};
+const evTag=e=>{const s=evState(e);return s==='live'?'<span class="tag" style="background:#ff6b4a;color:#fff;width:max-content">● En cours</span>':s==='ended'?'<span class="tag" style="width:max-content">Terminé</span>':''};
 const PTS={objective:15,journal:20,quick:10,work:10,meeting:10};
 
 /* ===== Outils ===== */
@@ -337,7 +340,7 @@ async function showIncubee(id,from){
  const globalPct=Math.round(STEPS.reduce((a,s)=>a+(s.n<st?100:s.n===st?stepPct(s.n):0),0)/4);
  const nm=esc(first(d.profile.full_name));
  let ev=[];try{ev=self?await DB.get('private_events','order=starts_at.asc'):[]}catch(e){}
- ev=ev.filter(e=>new Date(e.ends_at||e.starts_at)>now-6*3600e3);
+ ev=ev.filter(e=>evEnd(e)>now-2*864e5);
  app.innerHTML=`<div class="wrap reveal">
  ${from?`<p class="back"><button class="lnk" id="bk">← ${from==='admin'?'Retour à l\'administration':'Retour à mes incubées'}</button></p>`:''}
  <div class="grid g-hero sec">
@@ -383,7 +386,7 @@ async function showIncubee(id,from){
     ${up.length?`<ul class="list">${up.map(m=>mtg(m,false)).join('')}</ul>`:'<p class="empty">Aucune rencontre prévue.</p>'}
     ${past.length?`<p class="sm soft" style="font-weight:600;margin:18px 0 8px">Passées</p><ul class="list">${past.map(m=>mtg(m,true,jByM[m.id])).join('')}</ul>`:''}
    </section>
-   ${self?`<section><div class="sechead"><h2>Événements privés</h2></div>${ev.length?ev.map(e=>`<div class="card dark ev" style="margin-bottom:12px"><span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content;margin-top:6px" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}</div>`).join(''):'<p class="empty">Pas d\'événement privé à venir.</p>'}</section>`:''}
+   ${self?`<section><div class="sechead"><h2>Événements privés</h2></div>${ev.length?ev.map(e=>`<div class="card dark ev" style="margin-bottom:12px">${evTag(e)}<span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${evState(e)==='ended'?'<p class="soft sm">Merci à toutes pour votre présence !</p>':e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content;margin-top:6px" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}</div>`).join(''):'<p class="empty">Pas d\'événement privé à venir.</p>'}</section>`:''}
    <section><div class="sechead"><h2>Badges</h2><span class="soft sm">${sc.badges.filter(b=>b.ok).length}/${sc.badges.length}</span></div>
     <div class="badges">${sc.badges.map(b=>`<div class="bdg ${b.ok?'':'off'}" title="${esc(b.t)}"><span class="m" aria-hidden="true">${b.i}</span><b>${esc(b.t)}</b></div>`).join('')}</div>
    </section>
@@ -442,7 +445,7 @@ function card(d){const sc=score(d);const now=Date.now();const todo=d.meetings.fi
  <p class="sm"><b>Étape ${st}</b> · ${esc(STEPS[st-1].t)}</p><div class="mini"><i style="width:${Math.round(((st-1)*100+ (d.objectives.filter(o=>o.step===st).length?d.objectives.filter(o=>o.step===st&&o.done).length/d.objectives.filter(o=>o.step===st).length*100:0))/4)}%"></i></div>
  <p class="soft sm">${sc.pts} pts · niveau ${esc(sc.lvl.n)} · ${sc.doneN}/${sc.totN} objectifs</p>
  <div class="row" style="margin-top:10px">${todo?`<span class="tag warn">${todo} carnet${todo>1?'s':''} à remplir</span>`:'<span class="tag ok">Carnets à jour</span>'}${nxt?`<span class="tag">Prochaine : ${new Date(nxt.starts_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</span>`:''}</div></button>`}
-async function evBlock(){let ev=[];try{ev=await DB.get('private_events','order=starts_at.asc')}catch(e){}ev=ev.filter(e=>new Date(e.ends_at||e.starts_at)>Date.now()-6*3600e3);if(!ev.length)return'';return `<section class="sec"><div class="sechead"><h2>Événements privés</h2></div><div class="incs">${ev.map(e=>`<div class="card dark ev"><span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}${ME.role==='admin'?`<button class="lnk" style="color:#f0dcb6;width:max-content" data-evedit="${e.id}">Modifier le lien</button>`:''}</div>`).join('')}</div></section>`}
+async function evBlock(){let ev=[];try{ev=await DB.get('private_events','order=starts_at.asc')}catch(e){}ev=ev.filter(e=>evEnd(e)>Date.now()-2*864e5);if(!ev.length)return'';return `<section class="sec"><div class="sechead"><h2>Événements privés</h2></div><div class="incs">${ev.map(e=>`<div class="card dark ev">${evTag(e)}<span class="when">${fmtD(e.starts_at)} · ${fmtT(e.starts_at)}</span><h3 style="color:var(--paper);font-size:22px">${esc(e.title)}</h3>${e.description?`<p class="soft sm">${esc(e.description)}</p>`:''}${evState(e)==='ended'?'<p class="soft sm">Merci à toutes pour votre présence !</p>':e.join_url&&/^https?:\/\//.test(e.join_url)?`<a class="btn light sm" style="width:max-content" href="${esc(e.join_url)}" target="_blank" rel="noopener">Rejoindre l'événement</a>`:'<p class="soft sm">Le lien de connexion apparaîtra ici avant l\'événement.</p>'}${ME.role==='admin'?`<button class="lnk" style="color:#f0dcb6;width:max-content" data-evedit="${e.id}">Modifier le lien</button>`:''}</div>`).join('')}</div></section>`}
 
 /* --- Vue administratrice --- */
 async function showAdmin(tab='inc'){
