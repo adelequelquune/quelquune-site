@@ -243,6 +243,10 @@ main{padding-bottom:80px}
 .tile{display:grid;gap:10px;align-content:start}
 
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+.prof{background:none;border:0;padding:0;cursor:pointer;color:inherit;font:inherit;display:flex;gap:12px;align-items:center}
+.prof:hover b{text-decoration:underline}
+.csearch{padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fffaf2;z-index:2}.csearch input{padding:10px 12px;font-size:15px}
+#msr .citem{cursor:default}
 </style>
 </head>
 <body>
@@ -253,7 +257,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system
     <div class="who" id="who" hidden><span class="av" id="whoav"></span><span id="whoname"></span><button class="lnk" id="logout" type="button">Se déconnecter</button></div>
   </div>
   <div class="wrap"><nav class="nav" id="nav" aria-label="Espace membre" hidden>
-    <button data-t="home">Accueil</button><button data-t="events">Événements</button><button data-t="messages">Messagerie<span class="dot" hidden></span></button><button data-t="members">Membres</button><button data-t="news">Actualités</button><button data-t="quiz">Quiz</button><button data-t="settings">Paramètres</button>
+    <button data-t="home">Accueil</button><button data-t="events">Événements</button><button data-t="messages">Messagerie<span class="dot" hidden></span></button><button data-t="members">Membres<span class="dot" hidden></span></button><button data-t="news">Actualités</button><button data-t="quiz">Quiz</button><button data-t="settings">Paramètres</button>
   </nav></div>
 </header>
 <main id="app"><div class="loading"><img src="img/q-brun.png" alt="Chargement"></div></main>
@@ -294,7 +298,7 @@ let ME=null,EV=[],TAB='home',POLL=null,UNREAD=0;
  if(!ME.onboarded)onboard();
  unreadTick();setInterval(unreadTick,30000);
 })();
-async function unreadTick(){try{const c=await rpc('qlub_conversations');UNREAD=c.reduce((a,x)=>a+(+x.unread||0),0);const d=$('#nav [data-t=messages] .dot');if(d){d.textContent=UNREAD;d.hidden=!UNREAD}}catch(e){}}
+async function unreadTick(){try{const f=await rpc('qlub_friends');const d2=$('#nav [data-t=members] .dot');if(d2){d2.textContent=f.received.length;d2.hidden=!f.received.length}}catch(e){}try{const c=await rpc('qlub_conversations');UNREAD=c.reduce((a,x)=>a+(+x.unread||0),0);const d=$('#nav [data-t=messages] .dot');if(d){d.textContent=UNREAD;d.hidden=!UNREAD}}catch(e){}}
 function go(t){TAB=t;clearInterval(POLL);history.replaceState(null,'','#'+t);document.querySelectorAll('#nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.t===t?'page':'false'));
  app.innerHTML='<div class="loading"><img src="img/q-brun.png" alt="Chargement"></div>';window.scrollTo(0,0);
  ({home,events,messages,members,news,quiz,settings})[t]().catch(e=>{app.innerHTML=`<div class="wrap sec"><p class="empty">${esc(e.message)}</p></div>`})}
@@ -360,13 +364,22 @@ async function events(){EV=await rpc('qlub_events');const now=new Date();if(!CAL
  $('#cp').onclick=()=>{CALM=new Date(CALM.getFullYear(),CALM.getMonth()-1,1);draw()};$('#cn').onclick=()=>{CALM=new Date(CALM.getFullYear(),CALM.getMonth()+1,1);draw()};draw();bindReg(app)}
 
 /* ===== membres ===== */
-function memberCard(m){return `<div class="mcard"><div class="hd"><span class="av">${esc(ini(m.first_name))}</span><div><b>${esc(m.first_name)}</b><div class="soft sm">${esc(m.city||'')}${m.km!=null?` · <span class="km">${m.km<1?'moins d\'1':m.km} km</span>`:''}</div></div></div>
+function friendBtn(m){const f=m.friend;return f==='friends'?`<button class="btn light sm" data-fr="${esc(m.id)}" data-a="remove" title="Retirer de mes amies">Amies ✓</button>`:f==='sent'?`<button class="btn light sm" data-fr="${esc(m.id)}" data-a="cancel">Demande envoyée</button>`:f==='received'?`<button class="btn sm" data-fr="${esc(m.id)}" data-a="accept">Accepter son invitation</button>`:`<button class="btn light sm" data-fr="${esc(m.id)}" data-a="request">+ Ajouter en amie</button>`}
+function memberCard(m){return `<div class="mcard"><button class="hd prof" data-prof="${esc(m.id)}" aria-label="Voir le profil de ${esc(m.full_name||m.first_name)}"><span class="av">${esc(ini(m.full_name||m.first_name))}</span><div style="text-align:left"><b>${esc(m.full_name||m.first_name)}</b><div class="soft sm">${esc(m.city||'')}${m.km!=null?` · <span class="km">${m.km<1?'moins d\'1':m.km} km</span>`:''}</div></div></button>
  ${m.sector?`<div class="chips"><span class="chip">${esc(m.sector)}</span></div>`:''}${m.km!=null?`<p class="sm" style="font-weight:600;color:var(--ok)">Vous n'êtes pas loin ! Contactez-la pour en savoir plus sur elle.</p>`:''}
  ${m.skills?`<p class="sm"><span class="lbl">Compétences</span><br>${esc(m.skills)}</p>`:''}${m.needs?`<p class="sm"><span class="lbl">Besoins</span><br>${esc(m.needs)}</p>`:''}
- <button class="btn light sm" style="width:max-content" data-dm="${esc(m.id)}">Contacter ${esc(m.first_name)}</button></div>`}
-function bindContact(root){root.querySelectorAll('[data-dm]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const id=await rpc('qlub_start_dm',{p_other:b.dataset.dm});OPENCONV=id;go('messages')}catch(e){toast(e.message);b.disabled=false}})}
-async function members(){let km=+(sessionStorage.getItem('qkm')||30);const [near,all]=await Promise.all([ME.lat?rpc('qlub_nearby',{p_km:km}):Promise.resolve([]),rpc('qlub_directory')]);
- app.innerHTML=`<div class="wrap reveal"><section class="sec"><div class="sechead"><h2>Près de chez vous</h2>${ME.lat?`<label class="row sm" style="margin:0">Rayon <select id="km" style="width:auto">${[10,30,50,100,300].map(k=>`<option ${k===km?'selected':''} value="${k}">${k} km</option>`).join('')}</select></label>`:''}</div>
+ <div class="row"><button class="btn sm" data-dm="${esc(m.id)}">Envoyer un message</button>${friendBtn(m)}</div></div>`}
+async function showProfile(id){let m;try{m=await rpc('qlub_member',{p_id:id})}catch(e){toast(e.message);return}if(!m){toast('Profil introuvable');return}
+ modal(`<div class="hd" style="display:flex;gap:14px;align-items:center;margin-bottom:14px"><span class="av" style="width:56px;height:56px;font-size:18px">${esc(ini(m.full_name))}</span><div><h2>${esc(m.full_name)}</h2><p class="soft">${esc([m.city,m.sector].filter(Boolean).join(' · '))}</p></div></div>
+ ${m.skills?`<p style="margin-bottom:10px"><span class="lbl">Compétences</span><br>${esc(m.skills)}</p>`:''}${m.needs?`<p style="margin-bottom:10px"><span class="lbl">Besoins</span><br>${esc(m.needs)}</p>`:''}
+ ${m.friend==='received'?`<p class="sm" style="margin-bottom:10px;font-weight:600">${esc(m.first_name)} vous a invitée à devenir amies.</p>`:''}
+ <div class="row" style="margin-top:16px"><button class="btn" data-dm="${esc(m.id)}">Envoyer un message</button>${friendBtn(m)}${m.friend==='received'?`<button class="lnk" data-fr="${esc(m.id)}" data-a="decline">Refuser</button>`:''}</div>`);bindContact($('#dlg'))}
+function bindContact(root){root.querySelectorAll('[data-dm]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const id=await rpc('qlub_start_dm',{p_other:b.dataset.dm});OPENCONV=id;if($('#dlg').open)$('#dlg').close();go('messages')}catch(e){toast(e.message);b.disabled=false}});
+ root.querySelectorAll('[data-prof]').forEach(b=>b.onclick=()=>showProfile(b.dataset.prof));
+ root.querySelectorAll('[data-fr]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a;if(a==='remove'&&!confirm2())return;b.disabled=true;try{await rpc('qlub_friend',{p_other:b.dataset.fr,p_action:a});toast({request:'Invitation envoyée',accept:'Vous êtes maintenant amies',decline:'Invitation refusée',cancel:'Invitation annulée',remove:'Retirée de vos amies'}[a]);if($('#dlg').open)showProfile(b.dataset.fr);if(['members','home'].includes(TAB))go(TAB);unreadTick()}catch(e){toast(e.message);b.disabled=false}})}
+function confirm2(){return true}
+async function members(){let km=+(sessionStorage.getItem('qkm')||30);const [near,all,fr]=await Promise.all([ME.lat?rpc('qlub_nearby',{p_km:km}):Promise.resolve([]),rpc('qlub_directory'),rpc('qlub_friends')]);
+ app.innerHTML=`<div class="wrap reveal">${fr.received.length?`<section class="sec card" style="border-color:var(--cocoa)"><div class="sechead"><h2>Invitations reçues</h2></div><div class="cols3">${fr.received.map(m=>`<div class="mcard"><button class="hd prof" data-prof="${esc(m.id)}"><span class="av">${esc(ini(m.full_name))}</span><div style="text-align:left"><b>${esc(m.full_name)}</b><div class="soft sm">${esc(m.city||'')}</div></div></button><div class="row"><button class="btn sm" data-fr="${esc(m.id)}" data-a="accept">Accepter</button><button class="lnk" data-fr="${esc(m.id)}" data-a="decline">Refuser</button></div></div>`).join('')}</div></section>`:''}<section class="sec"><div class="sechead"><h2>Mes amies</h2><span class="soft sm">${fr.friends.length} amie${fr.friends.length>1?'s':''}${fr.sent.length?` · ${fr.sent.length} invitation${fr.sent.length>1?'s':''} en attente`:''}</span></div>${fr.friends.length?`<div class="cols3">${fr.friends.map(memberCard).join('')}</div>`:'<p class="empty">Ajoutez des membres en amies depuis leur profil : elles apparaîtront ici.</p>'}</section><section class="sec"><div class="sechead"><h2>Près de chez vous</h2>${ME.lat?`<label class="row sm" style="margin:0">Rayon <select id="km" style="width:auto">${[10,30,50,100,300].map(k=>`<option ${k===km?'selected':''} value="${k}">${k} km</option>`).join('')}</select></label>`:''}</div>
  ${!ME.lat?'<p class="empty">Indiquez votre ville dans vos paramètres pour voir les membres proches de chez vous.</p>':near.length?`<div class="cols3">${near.map(memberCard).join('')}</div>`:`<p class="empty">Aucune membre à moins de ${km} km pour l'instant.</p>`}</section>
  <section class="sec"><div class="sechead"><h2>Toutes les membres</h2><input id="flt" type="search" placeholder="Filtrer par secteur, ville, compétence…" style="max-width:340px"></div><div class="cols3" id="dir">${all.map(memberCard).join('')||'<p class="empty">Les profils apparaîtront ici.</p>'}</div></section></div>`;
  if($('#km'))$('#km').onchange=e=>{sessionStorage.setItem('qkm',e.target.value);go('members')};
@@ -376,15 +389,18 @@ async function members(){let km=+(sessionStorage.getItem('qkm')||30);const [near
 let OPENCONV=null;
 async function messages(){const cs=await rpc('qlub_conversations');if(!OPENCONV&&innerWidth>760)OPENCONV=cs[0]&&cs[0].id;
  app.innerHTML=`<div class="wrap reveal sec"><div class="sechead"><h2>Messagerie</h2><span class="soft sm">Visible uniquement par les membres du Qlub</span></div>
- <div class="chat${OPENCONV?' open':''}" id="chat"><div class="clist">${cs.map(c=>`<button class="citem" data-c="${esc(c.id)}" aria-current="${c.id===OPENCONV}"><b>${c.kind==='channel'?'# ':''}${esc(c.title||'Conversation')}</b><span class="p">${esc(c.last_body||'Aucun message')}</span>${+c.unread?`<span class="u">${c.unread}</span>`:''}</button>`).join('')}</div>
+ <div class="chat${OPENCONV?' open':''}" id="chat"><div class="clist"><div class="csearch"><input type="search" id="msq" placeholder="Rechercher une membre par nom ou prénom" aria-label="Rechercher une membre" autocomplete="off"><div id="msr"></div></div><div id="clv">${cs.map(c=>`<button class="citem" data-c="${esc(c.id)}" aria-current="${c.id===OPENCONV}"><b>${c.kind==='channel'?'# ':''}${esc(c.title||'Conversation')}</b><span class="p">${esc(c.last_body||'Aucun message')}</span>${+c.unread?`<span class="u">${c.unread}</span>`:''}</button>`).join('')}</div></div>
  <div class="thread"><div class="thead"><button class="lnk" id="bk" style="margin-right:10px">‹</button><span id="tt"></span></div><div class="msgs" id="msgs"></div><form class="send" id="sf"><textarea id="mb" placeholder="Votre message…" maxlength="4000" aria-label="Votre message"></textarea><button class="btn">Envoyer</button></form></div></div></div>`;
  app.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{OPENCONV=b.dataset.c;go('messages')});
+ let st;$('#msq').oninput=e=>{clearTimeout(st);const q=e.target.value.trim();if(q.length<2){$('#msr').innerHTML='';$('#clv').hidden=false;return}
+  st=setTimeout(async()=>{try{const r=await rpc('qlub_search_members',{q});$('#clv').hidden=true;
+   $('#msr').innerHTML=r.length?r.map(m=>`<div class="citem"><button class="prof" data-prof="${esc(m.id)}" style="text-align:left"><b>${esc(m.full_name)}</b><span class="p">${esc([m.city,m.sector].filter(Boolean).join(' · '))}</span></button><button class="btn sm" style="justify-self:start;margin-top:6px" data-dm="${esc(m.id)}">Commencer la conversation</button></div>`).join(''):'<p class="soft sm" style="padding:14px 16px">Aucune membre trouvée.</p>';bindContact($('#msr'))}catch(x){}},250)};
  $('#bk').onclick=()=>{OPENCONV=null;go('messages')};
  if(!OPENCONV)return;const c=cs.find(x=>x.id===OPENCONV);$('#tt').textContent=c?(c.kind==='channel'?'# ':'')+(c.title||''):'Conversation';
  let last=null;const box=$('#msgs');
  const load=async()=>{const ms=await rpc('qlub_messages',{p_conv:OPENCONV,p_since:last});if(!ms.length&&last)return;
   if(!last)box.innerHTML=ms.length?'':'<p class="empty">Aucun message pour l\'instant. Lancez la conversation !</p>';else if(box.querySelector('.empty'))box.innerHTML='';
-  ms.forEach(m=>{box.insertAdjacentHTML('beforeend',`<div class="msg${m.mine?' me':''}"><small>${m.mine?'':esc(m.author)+' · '}${esc(fS(m.created_at))} ${esc(fT(m.created_at))}</small><div class="b">${esc(m.body)}</div></div>`);last=m.created_at});box.scrollTop=box.scrollHeight};
+  ms.forEach(m=>{box.insertAdjacentHTML('beforeend',`<div class="msg${m.mine?' me':''}"><small>${m.mine?'':`<button class="prof lnk" style="font-size:11.5px" data-prof="${esc(m.author_id)}">${esc(m.author)}</button> · `}${esc(fS(m.created_at))} ${esc(fT(m.created_at))}</small><div class="b">${esc(m.body)}</div></div>`);last=m.created_at});bindContact(box);box.scrollTop=box.scrollHeight};
  await load();POLL=setInterval(()=>{if(TAB==='messages')load().catch(()=>{})},6000);unreadTick();
  $('#mb').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#sf').requestSubmit()}};
  $('#sf').onsubmit=async e=>{e.preventDefault();const v=$('#mb').value.trim();if(!v)return;$('#mb').value='';try{await rpc('qlub_send',{p_conv:OPENCONV,p_body:v});await load()}catch(x){toast(x.message);$('#mb').value=v}}}
