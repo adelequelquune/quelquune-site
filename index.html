@@ -1905,13 +1905,14 @@ const QEV={
 document.getElementById('chpw').addEventListener('click',()=>QEV.pw());
 const SK='qlub-session';let sess=null;
 try{sess=JSON.parse(sessionStorage.getItem(SK)||'null')}catch(e){}
+if(sess&&!sess.at){sess=null;try{sessionStorage.removeItem(SK)}catch(e){}}
 const save=v=>{sess=v;try{v?sessionStorage.setItem(SK,JSON.stringify(v)):sessionStorage.removeItem(SK)}catch(e){}};
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const big=document.getElementById('biglock'),st=document.getElementById('lockstate'),hl=document.getElementById('hlogin'),ht=document.getElementById('hltxt');
-const paint=()=>{const on=!!sess;hl.classList.toggle('on',on);hl.href=on?QROUTE.ROUTES.espace:QROUTE.ROUTES.connexion;ht.textContent=on?'Mon espace':'Se connecter';const mo=document.getElementById('mologin');mo.href=on?QROUTE.ROUTES.espace:QROUTE.ROUTES.connexion;mo.lastChild.textContent=on?'Mon espace':'Se connecter';mo.classList.toggle('on',on);
+const paint=()=>{const on=!!sess;hl.classList.toggle('on',on);hl.href=on?'/espace-qlub/':QROUTE.ROUTES.connexion;ht.textContent=on?'Mon espace':'Se connecter';const mo=document.getElementById('mologin');mo.href=on?'/espace-qlub/':QROUTE.ROUTES.connexion;mo.lastChild.textContent=on?'Mon espace':'Se connecter';mo.classList.toggle('on',on);
   big.classList.toggle('open',on);st.textContent=on?'Espace déverrouillé':'Espace réservé aux membres du Qlub';
   if(on){document.getElementById('hello').textContent='Bonjour, '+(sess.name||'').split(' ')[0];document.getElementById('demobar').hidden=!sess.demo;QEV.render()}};
-const guard=()=>{const h=QROUTE.cur();if(h==='espace'&&!sess)QROUTE.go('connexion',true);else if(h==='connexion'&&sess)QROUTE.go('espace',true);
+const guard=()=>{const h=QROUTE.cur();if(h==='espace'&&!sess)QROUTE.go('connexion',true);else if((h==='connexion'||h==='espace')&&sess){location.replace('/espace-qlub/');return}
   hl.setAttribute('aria-current',(h==='connexion'||h==='espace')?'page':'false');if(!(h==='connexion'||h==='espace'))hl.removeAttribute('aria-current')};
 addEventListener('pagechange',guard);paint();guard();
 const lf=document.getElementById('loginf'),uid=document.getElementById('uid'),upw=document.getElementById('upw'),er=document.getElementById('lgerr'),nt=document.getElementById('lgnote'),bt=document.getElementById('lgbtn');
@@ -1925,7 +1926,7 @@ lf.addEventListener('submit',async e=>{e.preventDefault();er.textContent='';nt.h
   if(!pw){upw.setAttribute('aria-invalid','true');upw.focus();return fail('Indiquez votre mot de passe.')}
   bt.disabled=true;bt.lastChild.textContent='Connexion…';
   try{const u=await AUTH.signIn(id,pw);save(u);upw.value='';paint();st.textContent='Bienvenue dans le Qlub';
-    setTimeout(()=>{QROUTE.go('espace')},RM?0:900)}
+    setTimeout(()=>{location.href='/espace-qlub/'},RM?0:700)}
   catch(err){if(err.message==='incub'){note('Ce compte donne accès à l\'espace incubateur.<a class="ulink" href="/espace-incubateur/">Aller à l\'espace incubateur</a>')}else if(err.message==='notmember'){note('Ce compte n\'est pas encore rattaché au Qlub. Écrivez-nous à <b class="nw">qlub@quelquune.com</b>.')}else if(err.message==='soon'){note('Les comptes membres s\'ouvrent avec le lancement de l\'espace membre. Vos identifiants vous seront envoyés par e-mail après votre adhésion.<a class="ulink" href="https://billing.stripe.com/p/login/28EaEW5cG3h6cLdgRCdQQ00" target="_blank" rel="noopener">En attendant, gérer mon abonnement</a>')}
     else{upw.setAttribute('aria-invalid','true');fail('Identifiant ou mot de passe incorrect.')}}
   finally{bt.disabled=false;bt.lastChild.textContent='Se connecter'}});

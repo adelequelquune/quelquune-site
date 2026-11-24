@@ -3,5 +3,6 @@ Allow: /
 Disallow: /connexion/
 Disallow: /espace-membre/
 Disallow: /espace-incubateur/
+Disallow: /espace-qlub/
 
 Sitemap: https://quelquune.com/sitemap.xml
