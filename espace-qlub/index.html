@@ -251,6 +251,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system
 .phset{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.phset>div{flex:1;min-width:180px}section.phset{padding:18px 22px}
 #phbox{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--line,#e6dccd)}
 .why{font-weight:600;color:var(--ok)}.ghost{background:#efe7f6;border-left:3px solid #6b4f8a;padding:10px 12px;border-radius:6px;margin-bottom:16px}
+.form{display:grid;gap:14px}.form label{margin:0}.form label input,.form label select{margin-top:6px;font-weight:400}.form .soft{font-weight:400}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.two{grid-template-columns:1fr}}
+.gcard{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.gcard>div:nth-child(2){flex:1;min-width:220px}.gcard h2{font-size:20px;margin-bottom:4px}
+.gcard.hot{border:2px solid #e2a43b;background:#fff7e6}.gico{font-size:32px;line-height:1}
+.glist{display:grid;gap:12px}.gitem{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 20px}
+.gship{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.gship input{width:220px;padding:9px 12px;font-size:15px}
 </style>
 </head>
 <body>
@@ -300,14 +306,15 @@ let ME=null,EV=[],TAB='home',POLL=null,UNREAD=0;
  setWho();$('#whoname').textContent=first(ME.full_name);$('#who').hidden=false;
  $('#nav').hidden=false;$('#nav').addEventListener('click',e=>{const b=e.target.closest('button[data-t]');if(b)go(b.dataset.t)});
  $('#logout').onclick=()=>{saveS(null);location.href='/'};
- const h=location.hash.slice(1);go(['home','events','messages','members','news','quiz','settings'].includes(h)?h:'home');
+ if(ME.role==='admin'){const b=document.createElement('button');b.dataset.t='gifts';b.textContent='Welcome Gifts';$('#nav').appendChild(b)}
+ const h=location.hash.slice(1);go(['home','events','messages','members','news','quiz','settings','gift'].concat(ME.role==='admin'?['gifts']:[]).includes(h)?h:'home');
  if(!ME.onboarded)onboard();
  unreadTick();setInterval(unreadTick,30000);
 })();
 async function unreadTick(){try{const f=await rpc('qlub_friends');const d2=$('#nav [data-t=members] .dot');if(d2){d2.textContent=f.received.length;d2.hidden=!f.received.length}}catch(e){}try{const c=await rpc('qlub_conversations');UNREAD=c.reduce((a,x)=>a+(+x.unread||0),0);const d=$('#nav [data-t=messages] .dot');if(d){d.textContent=UNREAD;d.hidden=!UNREAD}}catch(e){}}
 function go(t){TAB=t;clearInterval(POLL);history.replaceState(null,'','#'+t);document.querySelectorAll('#nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.t===t?'page':'false'));
  app.innerHTML='<div class="loading"><img src="img/q-brun.png" alt="Chargement"></div>';window.scrollTo(0,0);
- ({home,events,messages,members,news,quiz,settings})[t]().catch(e=>{app.innerHTML=`<div class="wrap sec"><p class="empty">${esc(e.message)}</p></div>`})}
+ ({home,events,messages,members,news,quiz,settings,gift,gifts})[t]().catch(e=>{app.innerHTML=`<div class="wrap sec"><p class="empty">${esc(e.message)}</p></div>`})}
 
 /* ===== cartes événement ===== */
 function evHero(e){const d=new Date(e.starts_at),ms=d-Date.now(),dd=Math.floor(ms/864e5),hh=Math.floor(ms%864e5/36e5);
@@ -334,12 +341,13 @@ function regForm(e){const n=String(ME.full_name||'').trim().split(/\s+/),fn=n.sh
   modal(`<h2>C'est confirmé !</h2><p style="margin:10px 0 16px">Votre inscription est enregistrée. Un e-mail de confirmation part vers <b>${esc(ME.email)}</b>.</p>${isNW(e)?NETW:''}<p style="margin-top:16px"><button class="btn" onclick="document.getElementById('dlg').close()">Fermer</button></p>`);go(TAB)},'#rgo','#rerr')}
 
 /* ===== accueil ===== */
-async function home(){const [ev,near,nw,qz,sg]=await Promise.all([rpc('qlub_events'),ME.lat?rpc('qlub_nearby',{p_km:30}):Promise.resolve([]),rpc('qlub_news',{p_limit:3}),rpc('qlub_quiz'),rpc('qlub_suggestions',{p_limit:3}).catch(()=>[])]);EV=ev;
+async function home(){const [ev,near,nw,qz,sg,gf]=await Promise.all([rpc('qlub_events'),ME.lat?rpc('qlub_nearby',{p_km:30}):Promise.resolve([]),rpc('qlub_news',{p_limit:3}),rpc('qlub_quiz'),rpc('qlub_suggestions',{p_limit:3}).catch(()=>[]),rpc('qlub_gift').catch(()=>null)]);EV=ev;
  const fut=ev.filter(e=>new Date(e.ends_at||new Date(e.starts_at).getTime()+72e5)>Date.now());
  const mine=fut.filter(e=>e.registered),open=fut.filter(e=>!e.registered);
  const top=mine[0]||open[0];
  app.innerHTML=`<div class="wrap reveal">
  ${top?evHero(top):`<section class="card dark sec"><span class="kicker">THE QLUB</span><h1 style="margin-top:10px">Bonjour ${esc(first(ME.full_name))} !</h1><p class="soft" style="margin-top:10px">Aucun événement à venir pour le moment. Revenez bientôt.</p></section>`}
+ ${giftCard(gf)}
  ${mine.slice(1).concat(open.filter(e=>e!==top)).length?`<section class="sec"><div class="sechead"><h2>Aussi à l'agenda</h2><button class="lnk" data-go="events">Voir le calendrier</button></div><div class="cols3">${mine.slice(1).concat(open.filter(e=>e!==top)).slice(0,3).map(e=>`<div class="mcard"><span class="lbl">${e.registered?'Inscrite':'Ouvert aux membres'}</span><h3>${esc(e.title)}</h3><p class="soft sm">${esc(fD(e.starts_at))} · ${esc(fT(e.starts_at))}</p>${e.registered?'':regBlock(e)}</div>`).join('')}</div></section>`:''}
  ${!ME.avatar_url?`<section class="card sec phset">${avH(ME,'width:56px;height:56px;font-size:18px')}<div><b>Ajoutez votre photo</b><p class="soft sm">Les membres vous reconnaîtront plus facilement.</p></div><button class="btn light sm" data-go="settings">Ajouter ma photo</button></section>`:''}
  ${sg.length?`<section class="sec"><div class="sechead"><h2>Profils suggérés pour vous</h2><span class="soft sm">Renouvelés chaque semaine</span></div><div class="cols3">${sg.map(memberCard).join('')}</div></section>`:''}
@@ -488,6 +496,37 @@ async function uploadPhoto(f){if(!/^image\/(jpeg|png|webp)$/.test(f.type))throw 
  const r=await fetch(SB.url+'/storage/v1/object/avatars/'+path,{method:'POST',headers:{apikey:SB.key,Authorization:'Bearer '+S.at,'Content-Type':'image/jpeg','x-upsert':'true'},body:blob});
  if(!r.ok)throw new Error('La photo n\'a pas pu être envoyée, réessayez.');
  ME=await rpc('qlub_save_profile',{p:{avatar_url:SB.url+'/storage/v1/object/public/avatars/'+path}});setWho()}
+/* ===== Welcome Gift ===== */
+const COUNTRIES=[['FR','France'],['BE','Belgique'],['CH','Suisse'],['LU','Luxembourg'],['MC','Monaco'],['GB','Royaume-Uni'],['IE','Irlande'],['DE','Allemagne'],['ES','Espagne'],['IT','Italie'],['PT','Portugal'],['NL','Pays-Bas'],['CA','Canada'],['US','États-Unis'],['SN','Sénégal'],['CI',"Côte d'Ivoire"],['CM','Cameroun'],['GA','Gabon'],['ML','Mali'],['BF','Burkina Faso'],['BJ','Bénin'],['TG','Togo'],['GN','Guinée'],['NE','Niger'],['MR','Mauritanie'],['MA','Maroc'],['DZ','Algérie'],['TN','Tunisie'],['CG','Congo'],['CD','RD Congo'],['CF','Centrafrique'],['TD','Tchad'],['MG','Madagascar'],['KM','Comores'],['DJ','Djibouti'],['RW','Rwanda'],['BI','Burundi'],['NG','Nigeria'],['GH','Ghana'],['KE','Kenya'],['ZA','Afrique du Sud'],['HT','Haïti']];
+const cname=c=>(COUNTRIES.find(x=>x[0]===c)||[c,c])[1];
+function giftCard(g){if(!g)return'';
+ if(g.status==='to_confirm')return `<section class="card sec gcard hot"><div class="gico" aria-hidden="true">🎁</div><div><h2>Votre Welcome Gift vous attend</h2><p class="soft">Carnet, stylo et tote bag Quelqu'UNE. Confirmez votre adresse de livraison pour qu'il parte.</p></div><button class="btn" data-go="gift">Confirmer mon adresse</button></section>`;
+ if(g.status==='waiting')return `<section class="card sec gcard"><div class="gico" aria-hidden="true">🎁</div><div><h2>Votre Welcome Gift</h2><p class="soft">Il vous sera envoyé après votre ${g.required}e mensualité (${Math.min(g.paid,g.required)}/${g.required}). Nous vous préviendrons par e-mail.</p></div></section>`;
+ if(g.status==='to_ship')return `<section class="card sec gcard"><div class="gico" aria-hidden="true">🎁</div><div><h2>Votre Welcome Gift est en préparation</h2><p class="soft">Adresse confirmée : ${esc(g.city||'')}, ${esc(cname(g.country))}. Vous recevrez le numéro de suivi par e-mail.</p></div><button class="btn light" data-go="gift">Modifier l'adresse</button></section>`;
+ if(g.status==='shipped')return `<section class="card sec gcard"><div class="gico" aria-hidden="true">📦</div><div><h2>Votre Welcome Gift est en route</h2><p class="soft">Envoyé le ${new Date(g.shipped_at).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}.</p></div><a class="btn light" target="_blank" rel="noopener" href="https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(g.tracking||'')}">Suivre mon envoi</a></section>`;
+ return ''}
+async function gift(){const g=await rpc('qlub_gift');
+ if(!g||!['to_confirm','to_ship'].includes(g.status)){app.innerHTML=`<div class="wrap reveal">${giftCard(g)||'<section class="card sec"><p class="empty">Aucun Welcome Gift pour le moment.</p></section>'}</div>`;bindGo();return}
+ const opt=COUNTRIES.map(([c,n])=>`<option value="${c}"${c===(g.country||'FR')?' selected':''}>${esc(n)}</option>`).join('');
+ app.innerHTML=`<div class="wrap reveal"><section class="card sec" style="max-width:640px"><h1>Mon Welcome Gift</h1><p class="soft" style="margin:8px 0 20px">Carnet, stylo et tote bag Quelqu'UNE, envoyés en lettre suivie. Vérifiez l'adresse : nous l'avons préremplie avec celle de votre adhésion.</p>
+ <form id="gf" class="form"><label>Nom et prénom du destinataire<input name="full_name" required autocomplete="name" value="${esc(g.full_name||'')}"></label>
+ <label>Adresse<input name="line1" required autocomplete="address-line1" value="${esc(g.line1||'')}"></label>
+ <label>Complément (bâtiment, étage, code…) <span class="soft">facultatif</span><input name="line2" autocomplete="address-line2" value="${esc(g.line2||'')}"></label>
+ <div class="two"><label>Code postal<input name="postal_code" required autocomplete="postal-code" value="${esc(g.postal_code||'')}"></label><label>Ville<input name="city" required autocomplete="address-level2" value="${esc(g.city||'')}"></label></div>
+ <div class="two"><label>Pays<select name="country" autocomplete="country">${opt}</select></label><label>Téléphone <span class="soft">facultatif, utile au livreur</span><input name="phone" type="tel" autocomplete="tel" value="${esc(g.phone||'')}"></label></div>
+ <button class="btn" type="submit">${g.status==='to_ship'?'Mettre à jour mon adresse':'Confirmer mon adresse'}</button></form></section></div>`;
+ $('#gf').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));try{await rpc('qlub_gift_confirm',{p:f});toast('Adresse confirmée, merci !');go('home')}catch(x){toast(x.message)}}}
+function bindGo(){app.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go))}
+async function gifts(){const L=await rpc('qlub_admin_gifts');const lab={to_ship:'À envoyer',to_confirm:'Adresse à confirmer',waiting:'Pas encore éligible',shipped:'Envoyé',cancelled:'Annulé'};
+ const ship=L.filter(x=>x.status==='to_ship');
+ const addr=x=>[x.full_name,x.line1,x.line2,(x.postal_code||'')+' '+(x.city||''),x.country&&x.country!=='FR'?cname(x.country).toUpperCase():''].filter(Boolean).map(esc).join('<br>');
+ app.innerHTML=`<div class="wrap reveal"><section class="sec"><div class="sechead"><h1>Welcome Gifts</h1>${ship.length?`<button class="btn" id="glab">Imprimer les étiquettes (${ship.length})</button>`:''}</div>
+ <p class="soft">Fondatrices : envoi dès le 1er paiement. Offre standard : après la 3e mensualité. Seul ton compte admin voit cette page.</p></section>
+ ${['to_ship','to_confirm','waiting','shipped'].map(st=>{const R=L.filter(x=>x.status===st);if(!R.length)return'';return `<section class="sec"><h2 style="margin-bottom:12px">${lab[st]} · ${R.length}</h2><div class="glist">${R.map(x=>`<article class="card gitem"><div><b>${esc(x.full_name||x.email)}</b><p class="soft sm">${esc(x.email)} · ${x.plan==='standard'?'standard':'fondatrice'} · ${Math.min(x.paid,x.required)}/${x.required} paiement(s)</p>${x.line1?`<p class="sm" style="margin-top:6px">${addr(x)}</p>`:''}</div>
+ ${st==='to_ship'?`<form class="gship" data-id="${x.id}"><input name="t" placeholder="N° de suivi La Poste" required><button class="btn sm">Marquer envoyé</button></form>`:st==='shipped'?`<p class="sm">Envoyé le ${new Date(x.shipped_at).toLocaleDateString('fr-FR')}<br><a class="lnk" target="_blank" rel="noopener" href="https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(x.tracking)}">${esc(x.tracking)}</a></p>`:''}</article>`).join('')}</div></section>`}).join('')||'<section class="card sec"><p class="empty">Aucun Welcome Gift pour le moment.</p></section>'}</div>`;
+ app.querySelectorAll('.gship').forEach(f=>f.onsubmit=async e=>{e.preventDefault();if(!confirm('Marquer comme envoyé et prévenir la membre par e-mail ?'))return;try{await rpc('qlub_admin_gift_ship',{p_id:f.dataset.id,p_tracking:f.t.value});toast('Envoi enregistré, la membre est prévenue');gifts()}catch(x){toast(x.message)}});
+ const gl=$('#glab');if(gl)gl.onclick=()=>{const w=window.open('','_blank');if(!w){toast('Autorisez les fenêtres pop-up pour imprimer');return}
+  w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Étiquettes Welcome Gift</title><style>@page{size:A4;margin:10mm}body{font-family:Arial,sans-serif;margin:0}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1px dashed #bbb;border-radius:3mm;padding:6mm 7mm;min-height:36mm;font-size:12pt;line-height:1.45;break-inside:avoid}.l small{display:block;color:#777;font-size:8pt;margin-bottom:2mm}p{font-size:10pt;color:#555}</style></head><body><p>Découpez chaque étiquette et collez-la sur l'enveloppe, à côté de la vignette Lettre suivie.</p><div class="g">${ship.map(x=>`<div class="l"><small>Exp. : Quelqu'UNE · The Qlub</small>${addr(x)}</div>`).join('')}</div><scr'+'ipt>onload=()=>print()<\/scr'+'ipt></body></html>`);w.document.close()}}
 /* ===== modale ===== */
 function modal(html,onOk,btnSel,errSel){const d=$('#dlg');d.innerHTML=`<div class="in"><div style="display:flex;justify-content:flex-end"><button class="x" aria-label="Fermer" onclick="this.closest('dialog').close()">×</button></div>${html}</div>`;if(!d.open)d.showModal();
  if(onOk&&btnSel){const b=d.querySelector(btnSel);b.onclick=async()=>{const er=d.querySelector(errSel);if(er)er.textContent='';b.disabled=true;try{await onOk()}catch(x){if(er)er.textContent=x.message}finally{b.disabled=false}}}}
