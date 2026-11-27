@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display='none'}}</script>
 
@@ -11,8 +11,11 @@
 <title>Mon espace · The Qlub by Quelqu'UNE</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="img/q-brun.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/dmsans.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/playfair.woff" as="font" type="font/woff" crossorigin>
+<style>@font-face{font-family:"Playfair Display";src:url(/fonts/playfair.woff) format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Playfair Display";src:url(/fonts/playfair-italic.woff) format("woff");font-weight:400 900;font-style:italic;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dmsans.woff) format("woff");font-weight:100 1000;font-style:normal;font-display:swap}</style>
 <style>
 
 :root{--bg:#ede3d3;--paper:#f6efe4;--cocoa:#5b3b24;--ink:#2e1f14;--soft:#6e5440;--toffee:#8c6a4a;--sand:#B6A489;--sand-l:#d9cbb4;--line:#d6c7b0;--ok:#4f7a4a;--ease:cubic-bezier(.22,1,.36,1)}
@@ -494,8 +497,8 @@ async function settings(){const st={};
  $('#dexp').onclick=async()=>{try{const d=await rpc('qlub_export_me');const u=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));const x=document.createElement('a');x.href=u;x.download='mes-donnees-the-qlub.json';document.body.appendChild(x);x.click();x.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Vos données sont téléchargées')}catch(x){toast(x.message)}};
  $('#ddel').onclick=()=>{modal(`<h2>Supprimer mon compte</h2><p class="soft" style="margin:10px 0 14px">Votre profil, vos messages, votre photo et vos inscriptions seront définitivement supprimés sous un mois. Les factures restent conservées 10 ans, comme la loi l'impose. Pensez aussi à résilier votre abonnement sur Stripe.</p><div class="fld"><label for="drs">Un mot sur la raison ? <span class="soft">facultatif</span></label><textarea id="drs"></textarea></div><button class="btn" id="ddok">Confirmer la demande</button>`);
   $('#ddok').onclick=async()=>{try{await rpc('qlub_request_deletion',{p_reason:$('#drs').value});$('#dlg').close();toast('Demande envoyée. Vous allez recevoir un e-mail de confirmation.')}catch(x){toast(x.message)}}};
- $('#cpw').onclick=()=>modal(`<h2>Changer mon mot de passe</h2><div class="fld" style="margin-top:14px"><label for="n1">Nouveau mot de passe (8 caractères minimum)</label><input type="password" id="n1" autocomplete="new-password"></div><div class="fld"><label for="n2">Confirmez-le</label><input type="password" id="n2" autocomplete="new-password"></div><p class="err" id="nerr"></p><button class="btn" id="ngo">Enregistrer</button>`,
-  async()=>{const a=$('#n1').value;if(a.length<8)throw new Error('8 caractères minimum.');if(a!==$('#n2').value)throw new Error('Les deux mots de passe sont différents.');await api('/auth/v1/user',{password:a},'PUT');$('#dlg').close();toast('Mot de passe modifié')},'#ngo','#nerr')}
+ $('#cpw').onclick=()=>modal(`<h2>Changer mon mot de passe</h2><div class="fld" style="margin-top:14px"><label for="n1">Nouveau mot de passe (10 caractères minimum)</label><input type="password" id="n1" autocomplete="new-password"></div><div class="fld"><label for="n2">Confirmez-le</label><input type="password" id="n2" autocomplete="new-password"></div><p class="err" id="nerr"></p><button class="btn" id="ngo">Enregistrer</button>`,
+  async()=>{const a=$('#n1').value;if(a.length<10)throw new Error('10 caractères minimum.');if(a!==$('#n2').value)throw new Error('Les deux mots de passe sont différents.');await api('/auth/v1/user',{password:a},'PUT');$('#dlg').close();toast('Mot de passe modifié')},'#ngo','#nerr')}
 
 async function uploadPhoto(f){if(!/^image\/(jpeg|png|webp)$/.test(f.type))throw new Error('Choisissez une image JPG, PNG ou WebP.');if(f.size>15e6)throw new Error('Image trop lourde (15 Mo maximum).');
  const url=URL.createObjectURL(f);const img=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ko(new Error('Image illisible.'));i.src=url});

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display='none'}}</script>
 
@@ -11,8 +11,11 @@
 <title>Espace incubateur · Quelqu'UNE</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="img/q-brun.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/dmsans.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/playfair.woff" as="font" type="font/woff" crossorigin>
+<style>@font-face{font-family:"Playfair Display";src:url(/fonts/playfair.woff) format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Playfair Display";src:url(/fonts/playfair-italic.woff) format("woff");font-weight:400 900;font-style:italic;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dmsans.woff) format("woff");font-weight:100 1000;font-style:normal;font-display:swap}</style>
 <style>
 :root{--bg:#ede3d3;--paper:#f6efe4;--cocoa:#5b3b24;--ink:#2e1f14;--soft:#6e5440;--toffee:#8c6a4a;--sand:#B6A489;--sand-l:#d9cbb4;--line:#d6c7b0;--ok:#4f7a4a;--ease:cubic-bezier(.22,1,.36,1)}
 *{box-sizing:border-box}
@@ -535,7 +538,7 @@ $('#dlg').addEventListener('click',e=>{if(e.target===$('#dlg'))$('#dlg').close()
 
 /* --- Mot de passe / déconnexion --- */
 $('#logout').onclick=()=>{S=null;saveS();renderLogin()};
-$('#pwbtn').onclick=()=>modal('<h2>Changer mon mot de passe</h2>',`<form id="f"><div class="fld"><label for="np">Nouveau mot de passe (8 caractères minimum)</label><input id="np" type="password" minlength="8" required autocomplete="new-password"></div><div class="fld"><label for="np2">Confirmer</label><input id="np2" type="password" minlength="8" required autocomplete="new-password"></div><button class="btn">Enregistrer</button></form>`,async()=>{if($('#np').value!==$('#np2').value)throw new Error('Les deux mots de passe ne correspondent pas.');await DB.setPassword($('#np').value);toast('Mot de passe modifié')});
+$('#pwbtn').onclick=()=>modal('<h2>Changer mon mot de passe</h2>',`<form id="f"><div class="fld"><label for="np">Nouveau mot de passe (10 caractères minimum)</label><input id="np" type="password" minlength="10" required autocomplete="new-password"></div><div class="fld"><label for="np2">Confirmer</label><input id="np2" type="password" minlength="10" required autocomplete="new-password"></div><button class="btn">Enregistrer</button></form>`,async()=>{if($('#np').value!==$('#np2').value)throw new Error('Les deux mots de passe ne correspondent pas.');await DB.setPassword($('#np').value);toast('Mot de passe modifié')});
 
 boot();
 })();
