@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <base href="/">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display='none'}}</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pique-nique Quelqu'UNE au parc de Sceaux · 1er août 2026</title>
 <meta name="description" content="Retour en images sur le pique-nique d&#x27;été de la communauté Quelqu&#x27;UNE au parc de Sceaux.">
@@ -889,6 +893,12 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
 @media(max-width:980px){.inside{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.qpriv{grid-template-columns:minmax(0,1fr)}.inside{grid-template-columns:minmax(0,1fr)}}
 .inc.rev.ph .arch img{left:0;right:0;top:0;bottom:auto;width:100%;height:100%;object-fit:cover;object-position:50% 20%;transform:none;transform-origin:50% 30%}
+.legal-page{max-width:880px}.legal-page h2{font-size:clamp(24px,3vw,30px);margin:44px 0 14px;scroll-margin-top:110px}.legal-page p,.legal-page li{font-size:16.5px;line-height:1.7}.legal-page p{margin:0 0 12px}.legal-page ul{padding-left:20px;margin:0 0 12px}.legal-page li{margin-bottom:8px}
+.lgtoc{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 4px}.lgtoc a{font-size:14px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--cocoa);text-decoration:none}.lgtoc a:hover{background:var(--cocoa);color:var(--paper)}
+.lgkey{list-style:none;padding:0!important;display:grid;gap:10px}.lgkey li{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:14px 18px;margin:0!important}
+.lgtable{border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:6px 0 16px;font-size:15px}.lgrow{display:grid;grid-template-columns:1.1fr 1.6fr 1.3fr 1fr;gap:14px;padding:12px 16px;border-top:1px solid var(--line);line-height:1.5}.lgrow:first-child{border-top:0}
+.lg3 .lgrow{grid-template-columns:1fr 2fr 1.3fr}.lg2 .lgrow{grid-template-columns:1.3fr 2fr}.lghead{background:var(--paper);font-weight:600}
+@media(max-width:760px){.lgrow,.lg3 .lgrow,.lg2 .lgrow{grid-template-columns:1fr;gap:4px}.lghead{display:none}.lgrow span:first-child{font-weight:600}}
 </style>
 </head>
 <body>
@@ -1288,7 +1298,7 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
               <input id="jmail" type="email" autocomplete="email" placeholder="prenom@exemple.com" required aria-describedby="jmail-h">
               <p class="hint" id="jmail-h">Elle devient l'identifiant de votre compte membre. Vous la retrouverez pré-remplie à l'étape du paiement.</p>
             </div>
-            <label class="chk"><input type="checkbox" id="jcgu" required><span>J'accepte les <a href="https://docs.google.com/document/d/1FkaXpwTF5J2-IQvI9baXy-JyQUtJDbap-oaS2XVDZks/edit?usp=sharing" target="_blank" rel="noopener">conditions générales</a> et la <a href="https://docs.google.com/document/d/1tIGbqih_W0wMb3MM_4K0v1EAS5q9XQsP-smDmyt0ipA/edit?usp=sharing" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>
+            <label class="chk"><input type="checkbox" id="jcgu" required><span>J'accepte les <a href="https://docs.google.com/document/d/1FkaXpwTF5J2-IQvI9baXy-JyQUtJDbap-oaS2XVDZks/edit?usp=sharing" target="_blank" rel="noopener">conditions générales</a> et la <a href="/confidentialite/" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>
             </div>
             <p class="ferr" id="jerr" role="alert"></p>
             <div class="tembed" id="giftemb" hidden></div>
@@ -1516,7 +1526,7 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
           <div class="hp" aria-hidden="true"><label for="cf-web">Site web</label><input id="cf-web" name="website" tabindex="-1" autocomplete="off"></div>
           <p class="ferr" id="cferr" role="alert" hidden></p>
           <button class="btn main" type="submit" id="cfgo">Envoyer ma candidature</button>
-          <p class="soft sm cfnote">Vos informations servent uniquement à étudier votre candidature. Voir la <a class="ulink" href="https://docs.google.com/document/d/1tIGbqih_W0wMb3MM_4K0v1EAS5q9XQsP-smDmyt0ipA/edit?usp=sharing" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
+          <p class="soft sm cfnote">Vos informations servent uniquement à étudier votre candidature. Voir la <a class="ulink" href="/confidentialite/" target="_blank" rel="noopener">politique de confidentialité</a>.</p>
         </form>
         <div class="candok" id="candok" hidden tabindex="-1">
           <span class="okic" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
@@ -1533,6 +1543,118 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
 </section>
 
 <!-- ANNONCE AFTERWORK 10 MARS -->
+<section class="page" data-page="confidentialite">
+  <div class="band">
+    <div class="wrap legal-page">
+      <div class="pagehead">
+        <h1>Confidentialité et mentions légales</h1>
+        <p class="lead">Comment Quelqu'UNE protège les données des femmes qui lui font confiance, et ce que vous pouvez faire des vôtres.</p>
+        <p class="soft sm" style="margin-top:14px">Dernière mise à jour : 27 novembre 2026</p>
+      </div>
+      <nav class="lgtoc" aria-label="Sommaire"><a href="#cf-essentiel">L'essentiel</a><a href="#cf-donnees">Données collectées</a><a href="#cf-messagerie">Messagerie privée</a><a href="#cf-destinataires">Prestataires</a><a href="#cf-durees">Conservation</a><a href="#cf-securite">Sécurité</a><a href="#cf-cookies">Cookies</a><a href="#cf-droits">Vos droits</a><a href="#cf-mentions">Mentions légales</a></nav>
+
+      <h2 id="cf-essentiel">L'essentiel</h2>
+      <ul class="lgkey">
+        <li><b>Vos données ne sont jamais vendues ni louées</b>, et ne servent à aucune publicité.</li>
+        <li><b>Vos messages privés ne sont lisibles que par vous et votre interlocutrice.</b> Quelqu'UNE ne les lit pas.</li>
+        <li><b>Les données des espaces membres sont hébergées en France</b> (Paris), dans l'Union européenne.</li>
+        <li><b>Aucun cookie publicitaire, aucun outil de mesure d'audience</b> : rien ne vous suit sur ce site.</li>
+        <li><b>Vous gardez la main</b> : téléchargement de vos données et demande de suppression directement depuis votre espace membre.</li>
+        <li><b>Le paiement est géré par Stripe</b> : Quelqu'UNE ne voit jamais vos coordonnées bancaires.</li>
+      </ul>
+
+      <h2>Qui est responsable de vos données</h2>
+      <p>Adèle Bata, entrepreneure individuelle exerçant sous le nom commercial Quelqu'UNE, 11 rue Michel Goutier, 94380 Bonneuil-sur-Marne, France. Contact : <a class="ulink" href="mailto:contact@quelquune.com">contact@quelquune.com</a>.</p>
+
+      <h2 id="cf-donnees">Les données collectées, et pourquoi</h2>
+      <div class="lgtable" role="table">
+        <div class="lgrow lghead" role="row"><span role="columnheader">Quand</span><span role="columnheader">Données</span><span role="columnheader">Pourquoi</span><span role="columnheader">Base légale</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous visitez le site</span><span role="cell">Adresse IP et informations techniques du navigateur, traitées par les hébergeurs. Votre langue et votre préférence de son, enregistrées dans votre navigateur.</span><span role="cell">Afficher le site, le sécuriser</span><span role="cell">Intérêt légitime</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous vous préinscrivez ou rejoignez la communauté</span><span role="cell">Prénom, nom, e-mail, téléphone, ville de résidence, réponses au formulaire</span><span role="cell">Vous inscrire, vous envoyer la confirmation et les informations demandées</span><span role="cell">Mesures précontractuelles, consentement</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous adhérez au Qlub</span><span role="cell">Identité, e-mail, adresse de facturation, offre choisie, dates et historique des paiements (sans numéro de carte)</span><span role="cell">Gérer l'adhésion, l'accès à l'espace membre, la facturation</span><span role="cell">Contrat, obligations comptables</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous utilisez l'Espace Qlub</span><span role="cell">Profil (nom, ville, secteur, besoins, compétences), photo si vous en ajoutez une, messages, demandes d'amitié, inscriptions aux événements, réponses au quiz</span><span role="cell">Faire fonctionner l'espace : annuaire, mises en relation, messagerie, événements</span><span role="cell">Contrat</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous recevez votre Welcome Gift</span><span role="cell">Nom, adresse postale, téléphone facultatif</span><span role="cell">Vous envoyer le cadeau et le suivi</span><span role="cell">Contrat</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous candidatez à l'incubateur</span><span role="cell">Identité, coordonnées, pays, description du projet</span><span role="cell">Étudier votre candidature et vous répondre</span><span role="cell">Mesures précontractuelles</span></div>
+        <div class="lgrow" role="row"><span role="cell">Vous êtes incubée ou mentore</span><span role="cell">Parcours, objectifs, carnet de bord, travaux déposés, rendez-vous, commentaires</span><span role="cell">Assurer et suivre l'accompagnement</span><span role="cell">Contrat</span></div>
+        <div class="lgrow" role="row"><span role="cell">Lettre du Qlub et e-mails</span><span role="cell">E-mail, prénom</span><span role="cell">Vous informer des actualités et événements</span><span role="cell">Contrat (e-mails de service) ou consentement (lettre, désactivable à tout moment)</span></div>
+      </div>
+      <p>Les champs marqués comme obligatoires sont nécessaires pour vous inscrire ou adhérer. Le reste est facultatif. Nous ne collectons volontairement aucune donnée sensible (santé, religion, opinions…) : merci de ne pas en partager dans les espaces collectifs.</p>
+
+      <h2 id="cf-messagerie">Messagerie privée et visibilité de votre profil</h2>
+      <ul>
+        <li><b>Messages privés</b> : seules les deux personnes de la conversation peuvent les lire. Aucune autre membre ni l'équipe de Quelqu'UNE n'y a accès depuis le site. Ils sont chiffrés pendant leur transport (HTTPS) et stockés sur des serveurs chiffrés en France. L'accès technique à la base n'est utilisé qu'en cas d'obligation légale ou de signalement d'abus, et cet accès est journalisé.</li>
+        <li><b>Le salon du Qlub</b> est un espace collectif : ce que vous y écrivez est visible par toutes les membres.</li>
+        <li><b>Votre profil</b> (prénom, ville, secteur, besoins, compétences, photo) n'est visible que des membres connectées, et seulement si l'option « Apparaître auprès des autres membres » est activée. Vous pouvez la désactiver à tout moment dans vos paramètres.</li>
+        <li><b>Les profils suggérés</b> sont calculés automatiquement à partir du secteur, de la ville et des besoins déclarés. Ces suggestions n'entraînent aucune décision à votre égard, et vous n'apparaissez plus dans celles des autres si vous masquez votre profil.</li>
+        <li><b>Votre ville</b> sert uniquement à calculer une distance approximative avec les autres membres. Votre adresse n'est jamais affichée.</li>
+      </ul>
+
+      <h2 id="cf-destinataires">Qui y a accès : nos prestataires</h2>
+      <p>Vos données sont accessibles à Adèle Bata et, au strict besoin, aux mentores pour les incubées qu'elles accompagnent. Elles sont traitées par les prestataires suivants, liés par des engagements de confidentialité :</p>
+      <div class="lgtable lg3" role="table">
+        <div class="lgrow lghead" role="row"><span role="columnheader">Prestataire</span><span role="columnheader">Rôle</span><span role="columnheader">Localisation</span></div>
+        <div class="lgrow" role="row"><span role="cell">Supabase</span><span role="cell">Base de données des espaces membres, comptes, messagerie, photos</span><span role="cell">Paris, Union européenne</span></div>
+        <div class="lgrow" role="row"><span role="cell">Make</span><span role="cell">Automatisations (e-mails, formulaires)</span><span role="cell">Union européenne</span></div>
+        <div class="lgrow" role="row"><span role="cell">Stripe</span><span role="cell">Paiements et abonnements</span><span role="cell">Irlande, transferts encadrés vers les États-Unis</span></div>
+        <div class="lgrow" role="row"><span role="cell">Tally</span><span role="cell">Formulaires d'inscription</span><span role="cell">Union européenne</span></div>
+        <div class="lgrow" role="row"><span role="cell">Google (Gmail)</span><span role="cell">Envoi et réception des e-mails ; polices d'écriture du site</span><span role="cell">Union européenne et États-Unis</span></div>
+        <div class="lgrow" role="row"><span role="cell">GitHub</span><span role="cell">Hébergement des pages publiques du site</span><span role="cell">États-Unis</span></div>
+        <div class="lgrow" role="row"><span role="cell">Open-Meteo</span><span role="cell">Recherche du nom de votre ville (sans autre donnée)</span><span role="cell">Europe</span></div>
+        <div class="lgrow" role="row"><span role="cell">WhatsApp (Meta)</span><span role="cell">Groupe de la communauté</span><span role="cell">Irlande et États-Unis</span></div>
+        <div class="lgrow" role="row"><span role="cell">Zoom, Google Meet</span><span role="cell">Visioconférences</span><span role="cell">Union européenne et États-Unis</span></div>
+        <div class="lgrow" role="row"><span role="cell">La Poste</span><span role="cell">Envoi des Welcome Gifts</span><span role="cell">France</span></div>
+      </div>
+      <p>Les transferts hors de l'Union européenne sont encadrés par le cadre de protection des données UE–États-Unis ou par des clauses contractuelles types de la Commission européenne. Le détail est disponible sur simple demande.</p>
+
+      <h2 id="cf-durees">Combien de temps nous les gardons</h2>
+      <div class="lgtable lg2" role="table">
+        <div class="lgrow lghead" role="row"><span role="columnheader">Données</span><span role="columnheader">Durée</span></div>
+        <div class="lgrow" role="row"><span role="cell">Compte membre, profil, messages, photo</span><span role="cell">Tant que votre compte existe, puis suppression sous un mois après votre demande ou la fin de votre adhésion</span></div>
+        <div class="lgrow" role="row"><span role="cell">Adresse du Welcome Gift</span><span role="cell">Effacée automatiquement 3 mois après l'envoi</span></div>
+        <div class="lgrow" role="row"><span role="cell">Copies techniques des e-mails envoyés</span><span role="cell">Effacées automatiquement après 30 jours</span></div>
+        <div class="lgrow" role="row"><span role="cell">Journaux de sécurité et d'envoi</span><span role="cell">13 mois</span></div>
+        <div class="lgrow" role="row"><span role="cell">Préinscriptions et contacts sans suite</span><span role="cell">3 ans après le dernier échange</span></div>
+        <div class="lgrow" role="row"><span role="cell">Candidatures à l'incubateur non retenues</span><span role="cell">2 ans après la décision, pour vous recontacter lors d'une prochaine promotion</span></div>
+        <div class="lgrow" role="row"><span role="cell">Preuve du contrat et réclamations</span><span role="cell">5 ans après la fin de la relation</span></div>
+        <div class="lgrow" role="row"><span role="cell">Factures et pièces comptables</span><span role="cell">10 ans (obligation légale)</span></div>
+      </div>
+
+      <h2 id="cf-securite">Comment nous les protégeons</h2>
+      <ul>
+        <li>Connexion chiffrée (HTTPS) sur tout le site et les espaces membres.</li>
+        <li>Mots de passe stockés sous forme chiffrée irréversible : personne, pas même Quelqu'UNE, ne peut les lire.</li>
+        <li>Cloisonnement strict : chaque membre n'accède qu'à ses propres données et à ce que les autres ont choisi de rendre visible. Les mentores ne voient que leurs incubées.</li>
+        <li>Base de données hébergée en France, chiffrée et sauvegardée.</li>
+        <li>Règles de sécurité qui empêchent le chargement de contenus et de scripts externes non autorisés sur le site.</li>
+        <li>Surveillance régulière des tentatives de connexion anormales et des alertes de sécurité.</li>
+        <li>Effacement automatique des données dont nous n'avons plus besoin.</li>
+        <li>En cas de violation de données présentant un risque, la CNIL est prévenue sous 72 heures, et les personnes concernées dans les meilleurs délais.</li>
+      </ul>
+
+      <h2 id="cf-cookies">Cookies et stockage dans votre navigateur</h2>
+      <p>Ce site n'utilise <b>aucun cookie publicitaire ni de mesure d'audience</b>. Il enregistre seulement dans votre navigateur votre langue et votre préférence de son, ainsi que votre session de connexion à l'espace membre, effacée à la fermeture de l'onglet. Ces éléments sont strictement nécessaires au fonctionnement du site et ne demandent donc pas de consentement. Les polices d'écriture sont chargées depuis les serveurs de Google, qui reçoivent à cette occasion votre adresse IP.</p>
+
+      <h2 id="cf-droits">Vos droits</h2>
+      <p>Vous pouvez à tout moment accéder à vos données, les rectifier, les effacer, en limiter l'usage, vous opposer à un traitement fondé sur l'intérêt légitime, récupérer vos données dans un format lisible, retirer votre consentement, et définir des directives sur leur sort après votre décès.</p>
+      <ul>
+        <li><b>Depuis l'Espace Qlub</b>, rubrique Paramètres : modifier votre profil, masquer votre profil, vous désabonner de la lettre, <b>télécharger vos données</b> ou <b>demander la suppression de votre compte</b>.</li>
+        <li><b>Par e-mail</b> à <a class="ulink" href="mailto:contact@quelquune.com">contact@quelquune.com</a>, pour toute autre demande. Une preuve d'identité peut vous être demandée en cas de doute.</li>
+      </ul>
+      <p>Nous répondons sous un mois au plus tard. Si vous estimez que vos droits ne sont pas respectés, vous pouvez saisir la CNIL (<a class="ulink" href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">cnil.fr/plaintes</a>).</p>
+
+      <h2>Confidentialité entre membres</h2>
+      <p>The Qlub est un espace privé fondé sur la confiance. Ce qui est partagé entre membres (informations, projets, photos, échanges) ne doit pas être diffusé à l'extérieur sans l'accord des personnes concernées. Les rencontres en visioconférence ne sont pas enregistrées, sauf annonce préalable et accord des participantes.</p>
+
+      <h2 id="cf-mentions">Mentions légales</h2>
+      <p><b>Éditrice du site</b> : Adèle Bata, entrepreneure individuelle, nom commercial Quelqu'UNE, 11 rue Michel Goutier, 94380 Bonneuil-sur-Marne, France. E-mail : <a class="ulink" href="mailto:contact@quelquune.com">contact@quelquune.com</a>. Directrice de la publication : Adèle Bata.</p>
+      <p><b>Hébergement du site</b> : GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis. <b>Hébergement des espaces membres</b> : Supabase, serveurs situés à Paris (Union européenne).</p>
+      <p><b>Propriété intellectuelle</b> : les textes, logos, photos et visuels de ce site appartiennent à Quelqu'UNE ou à leurs auteurs. Toute reproduction sans autorisation est interdite.</p>
+
+      <h2>Évolutions de cette page</h2>
+      <p>Cette politique peut évoluer avec nos services. En cas de changement important, les membres en sont informées par e-mail.</p>
+    </div>
+  </div>
+</section>
 <section class="page" data-page="afterwork-mars">
   <div class="ann-hero">
     <img src="img/aw-salle.jpg" alt="Le public face aux intervenantes, sous l'écran de l'afterwork Quelqu'UNE" style="object-position:50% 30%">
@@ -1751,15 +1873,15 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
     <div><a class="logo flogo" href="/" aria-label="Quelqu'UNE, accueil"><img src="img/q-creme.png" alt="Logo Quelqu'UNE" width="512" height="512"></a><p style="margin-top:14px;max-width:34ch">La communauté des femmes de la diaspora africaine qui entreprennent, dirigent et osent.</p></div>
     <div><h3>Contact</h3><ul><li><span class="flab">Quelqu'UNE</span><a class="nw" href="mailto:contact@quelquune.com">contact@quelquune.com</a></li><li><span class="flab">The Qlub</span><a class="nw" href="mailto:qlub@quelquune.com">qlub@quelquune.com</a></li><li><a href="https://www.instagram.com/quelquune.co/">Instagram</a></li><li><a href="https://www.linkedin.com/company/quelquune/">LinkedIn</a></li></ul></div>
     <div><h3>Explorer</h3><ul><li><a href="/communaute/">Communauté</a></li><li><a href="/the-qlub/">The Qlub</a></li><li><a href="/evenements/">Événements</a></li><li><a href="/incubateur/">Incubateur</a></li><li><a href="/espace-incubateur/">Espace incubateur</a></li><li><a href="/devenir-membre/">Devenir membre</a></li><li><a href="/connexion/">Se connecter</a></li></ul></div>
-    <div><h3>Informations</h3><ul><li><a href="https://docs.google.com/document/d/1FkaXpwTF5J2-IQvI9baXy-JyQUtJDbap-oaS2XVDZks/edit?usp=sharing">Conditions générales</a></li><li><a href="https://docs.google.com/document/d/1tIGbqih_W0wMb3MM_4K0v1EAS5q9XQsP-smDmyt0ipA/edit?usp=sharing">Confidentialité</a></li></ul></div>
+    <div><h3>Informations</h3><ul><li><a href="https://docs.google.com/document/d/1FkaXpwTF5J2-IQvI9baXy-JyQUtJDbap-oaS2XVDZks/edit?usp=sharing">Conditions générales</a></li><li><a href="/confidentialite/">Confidentialité</a></li><li><a href="/confidentialite/#cf-mentions">Mentions légales</a></li></ul></div>
   </div>
   <div class="wrap legal">© 2026 Quelqu'UNE</div>
 </footer>
 
 <script>
 {
-const ROUTES={"accueil": "/", "communaute": "/communaute/", "qlub": "/the-qlub/", "evenements": "/evenements/", "incubateur": "/incubateur/", "membre": "/devenir-membre/", "connexion": "/connexion/", "espace": "/espace-membre/", "diaspora-tech": "/evenements/femmes-diaspora-africaine-tech/", "diner-rentree": "/evenements/diner-de-rentree/", "pique-nique": "/evenements/pique-nique-parc-de-sceaux/", "afterwork-mars": "/evenements/afterwork-leadership-feminin/"};
-const META={"accueil": ["Quelqu'UNE · Communauté des femmes de la diaspora africaine", "Quelqu'UNE (Quelqu'une) est la communauté des femmes de la diaspora africaine qui entreprennent, dirigent et osent : The Qlub, un incubateur et bientôt un fonds d'investissement."], "communaute": ["La communauté Quelqu'UNE · Femmes de la diaspora africaine", "Rejoignez gratuitement la communauté Quelqu'UNE : un groupe WhatsApp et des événements pour les femmes de la diaspora africaine qui entreprennent, dirigent et osent."], "qlub": ["The Qlub by Quelqu'UNE · L'espace membre", "The Qlub, l'espace membre de Quelqu'UNE : un réseau ciblé, de l'entraide, des opportunités, des ateliers et de la visibilité pour les femmes de la diaspora africaine."], "evenements": ["Événements Quelqu'UNE · Afterworks, dîners et ateliers", "L'agenda de Quelqu'UNE : afterworks, dîners, ateliers et tables rondes pour les femmes de la diaspora africaine, et la photothèque de nos rencontres."], "incubateur": ["Incubateur Quelqu'UNE · Candidatures promotion 2027-2028", "L'incubateur Quelqu'UNE accompagne pendant six mois les femmes de la diaspora africaine qui portent un projet. Candidatures ouvertes jusqu'au 30 septembre 2027."], "membre": ["Devenir membre du Qlub · Quelqu'UNE", "Rejoignez The Qlub by Quelqu'UNE au tarif fondatrice de 9,99 € par mois, réservé aux 100 premières membres. Sans engagement."], "connexion": ["Se connecter · Quelqu'UNE", "Accédez à votre espace membre The Qlub."], "espace": ["Espace membre · Quelqu'UNE", "Votre espace membre The Qlub."], "diaspora-tech": ["Les femmes de la diaspora africaine dans la tech · Quelqu'UNE", "Retour en images sur la soirée du 2 novembre 2026 au campus SKEMA de Suresnes, avec SKEMAFRICA et Intertech Talents : plus de 80 personnes réunies."], "diner-rentree": ["Dîner de rentrée Quelqu'UNE · 11 septembre 2026", "Retour en images et en vidéo sur le dîner afro-gastronomique de rentrée de Quelqu'UNE à Montreuil, avec BAÏAS Créations."], "pique-nique": ["Pique-nique Quelqu'UNE au parc de Sceaux · 1er août 2026", "Retour en images sur le pique-nique d'été de la communauté Quelqu'UNE au parc de Sceaux."], "afterwork-mars": ["Afterwork Quelqu'UNE · Leadership féminin et diaspora", "Le premier événement Quelqu'UNE, le 10 mars 2026 : prendre sa place sans s'excuser, avec Sidicath Dissou et Danièle Tjek."]};
+const ROUTES={"accueil": "/", "communaute": "/communaute/", "qlub": "/the-qlub/", "evenements": "/evenements/", "incubateur": "/incubateur/", "membre": "/devenir-membre/", "connexion": "/connexion/", "espace": "/espace-membre/", "diaspora-tech": "/evenements/femmes-diaspora-africaine-tech/", "diner-rentree": "/evenements/diner-de-rentree/", "pique-nique": "/evenements/pique-nique-parc-de-sceaux/", "afterwork-mars": "/evenements/afterwork-leadership-feminin/", "confidentialite": "/confidentialite/"};
+const META={"accueil": ["Quelqu'UNE · Communauté des femmes de la diaspora africaine", "Quelqu'UNE (Quelqu'une) est la communauté des femmes de la diaspora africaine qui entreprennent, dirigent et osent : The Qlub, un incubateur et bientôt un fonds d'investissement."], "communaute": ["La communauté Quelqu'UNE · Femmes de la diaspora africaine", "Rejoignez gratuitement la communauté Quelqu'UNE : un groupe WhatsApp et des événements pour les femmes de la diaspora africaine qui entreprennent, dirigent et osent."], "qlub": ["The Qlub by Quelqu'UNE · L'espace membre", "The Qlub, l'espace membre de Quelqu'UNE : un réseau ciblé, de l'entraide, des opportunités, des ateliers et de la visibilité pour les femmes de la diaspora africaine."], "evenements": ["Événements Quelqu'UNE · Afterworks, dîners et ateliers", "L'agenda de Quelqu'UNE : afterworks, dîners, ateliers et tables rondes pour les femmes de la diaspora africaine, et la photothèque de nos rencontres."], "incubateur": ["Incubateur Quelqu'UNE · Candidatures promotion 2027-2028", "L'incubateur Quelqu'UNE accompagne pendant six mois les femmes de la diaspora africaine qui portent un projet. Candidatures ouvertes jusqu'au 30 septembre 2027."], "membre": ["Devenir membre du Qlub · Quelqu'UNE", "Rejoignez The Qlub by Quelqu'UNE au tarif fondatrice de 9,99 € par mois, réservé aux 100 premières membres. Sans engagement."], "connexion": ["Se connecter · Quelqu'UNE", "Accédez à votre espace membre The Qlub."], "espace": ["Espace membre · Quelqu'UNE", "Votre espace membre The Qlub."], "diaspora-tech": ["Les femmes de la diaspora africaine dans la tech · Quelqu'UNE", "Retour en images sur la soirée du 2 novembre 2026 au campus SKEMA de Suresnes, avec SKEMAFRICA et Intertech Talents : plus de 80 personnes réunies."], "diner-rentree": ["Dîner de rentrée Quelqu'UNE · 11 septembre 2026", "Retour en images et en vidéo sur le dîner afro-gastronomique de rentrée de Quelqu'UNE à Montreuil, avec BAÏAS Créations."], "pique-nique": ["Pique-nique Quelqu'UNE au parc de Sceaux · 1er août 2026", "Retour en images sur le pique-nique d'été de la communauté Quelqu'UNE au parc de Sceaux."], "afterwork-mars": ["Afterwork Quelqu'UNE · Leadership féminin et diaspora", "Le premier événement Quelqu'UNE, le 10 mars 2026 : prendre sa place sans s'excuser, avec Sidicath Dissou et Danièle Tjek."], "confidentialite": ["Confidentialité et mentions légales · Quelqu'UNE", "Comment Quelqu'UNE protège vos données : données collectées, messagerie privée, prestataires, durées de conservation, sécurité, cookies et vos droits RGPD."]};
 const PAGES=Object.keys(ROUTES);
 const HASHMODE=!/^https?:$/.test(location.protocol)||/claude|anthropic|claudeusercontent/i.test(location.hostname);
 const norm=pth=>(pth.replace(/\/index\.html$/,'/').replace(/([^/])$/,'$1/'));
@@ -1991,7 +2113,7 @@ document.getElementById('logout').addEventListener('click',async()=>{await AUTH.
 }
 {
 /* Recherche sur tout le site (hors espace membre) */
-const LBL={accueil:'Accueil',communaute:'Communauté',qlub:'The Qlub',evenements:'Événements',incubateur:'Incubateur',membre:'Devenir membre','diaspora-tech':'Soirée tech, 2 novembre','diner-rentree':'Dîner de rentrée, 11 septembre','pique-nique':'Pique-nique, 1er août','afterwork-mars':'Afterwork, 10 mars'};
+const LBL={accueil:'Accueil',communaute:'Communauté',qlub:'The Qlub',evenements:'Événements',incubateur:'Incubateur',membre:'Devenir membre','diaspora-tech':'Soirée tech, 2 novembre','diner-rentree':'Dîner de rentrée, 11 septembre','pique-nique':'Pique-nique, 1er août','afterwork-mars':'Afterwork, 10 mars',confidentialite:'Confidentialité'};
 const SKIP=new Set(['espace','connexion']);
 const norm=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const esc=t=>t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

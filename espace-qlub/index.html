@@ -2,6 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tally.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://udglemrdxabpzedqnkml.supabase.co https://tally.so; media-src 'self' blob:; connect-src 'self' https://udglemrdxabpzedqnkml.supabase.co https://hook.eu1.make.com https://geocoding-api.open-meteo.com; frame-src https://tally.so; object-src 'none'; base-uri 'self'; form-action 'self' https://hook.eu1.make.com https://tally.so; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){try{window.top.location=window.self.location}catch(e){document.documentElement.style.display='none'}}</script>
+
 <base href="/">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mon espace · The Qlub by Quelqu'UNE</title>
@@ -479,12 +483,17 @@ async function settings(){const st={};
  <label class="sw"><input type="checkbox" id="pl" ${ME.newsletter?'checked':''}><span><b>Recevoir la lettre du Qlub par e-mail</b><br><span class="soft sm">Un mercredi sur deux, le résumé des actualités.</span></span></label>
  <p class="err" id="perr" role="alert" style="margin-top:12px"></p><button class="btn" style="margin-top:8px">Enregistrer</button></form>
  <section class="card sec"><h3>Sécurité</h3><p class="soft sm" style="margin:6px 0 12px">Identifiant : ${esc(ME.email)}</p><button class="btn light" id="cpw">Changer mon mot de passe</button></section>
+ <section class="card sec"><h3>Mes données personnelles</h3><p class="soft sm" style="margin:6px 0 12px">Vos données sont hébergées en France et ne sont jamais vendues. Vos messages privés ne sont visibles que par vous et votre interlocutrice. <a class="lnk" href="/confidentialite/" target="_blank" rel="noopener">Politique de confidentialité</a></p>
+ <div class="row" style="gap:10px;flex-wrap:wrap"><button class="btn light" id="dexp" type="button">Télécharger mes données</button><button class="btn light" id="ddel" type="button">Demander la suppression de mon compte</button></div></section>
  <p class="sub">Abonnement : factures, carte bancaire et résiliation se gèrent sur Stripe. <a href="https://billing.stripe.com/p/login/28EaEW5cG3h6cLdgRCdQQ00" target="_blank" rel="noopener">Gérer mon abonnement</a></p></div>`;
  bindCity('pc',st);bindSector('ps');
  $('#phf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{toast('Envoi de la photo…');await uploadPhoto(f);toast('Photo enregistrée');settings()}catch(x){toast(x.message)}};
  if($('#phx'))$('#phx').onclick=async()=>{try{ME=await rpc('qlub_save_profile',{p:{avatar_url:''}});setWho();toast('Photo retirée');settings()}catch(x){toast(x.message)}};
  $('#pf').onsubmit=async e=>{e.preventDefault();const er=$('#perr');er.textContent='';if($('#pc').value.trim()!==(ME.city||'')&&!st.lat){er.textContent='Choisissez votre ville dans la liste proposée.';return}
   try{ME=await rpc('qlub_save_profile',{p:{full_name:$('#pn').value,...st,sector:sectorVal('ps'),needs:$('#pb').value,skills:$('#pk').value,show_nearby:$('#pv').checked,newsletter:$('#pl').checked}});$('#whoname').textContent=first(ME.full_name);toast('Profil enregistré')}catch(x){er.textContent=x.message}};
+ $('#dexp').onclick=async()=>{try{const d=await rpc('qlub_export_me');const u=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));const x=document.createElement('a');x.href=u;x.download='mes-donnees-the-qlub.json';document.body.appendChild(x);x.click();x.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Vos données sont téléchargées')}catch(x){toast(x.message)}};
+ $('#ddel').onclick=()=>{modal(`<h2>Supprimer mon compte</h2><p class="soft" style="margin:10px 0 14px">Votre profil, vos messages, votre photo et vos inscriptions seront définitivement supprimés sous un mois. Les factures restent conservées 10 ans, comme la loi l'impose. Pensez aussi à résilier votre abonnement sur Stripe.</p><div class="fld"><label for="drs">Un mot sur la raison ? <span class="soft">facultatif</span></label><textarea id="drs"></textarea></div><button class="btn" id="ddok">Confirmer la demande</button>`);
+  $('#ddok').onclick=async()=>{try{await rpc('qlub_request_deletion',{p_reason:$('#drs').value});$('#dlg').close();toast('Demande envoyée. Vous allez recevoir un e-mail de confirmation.')}catch(x){toast(x.message)}}};
  $('#cpw').onclick=()=>modal(`<h2>Changer mon mot de passe</h2><div class="fld" style="margin-top:14px"><label for="n1">Nouveau mot de passe (8 caractères minimum)</label><input type="password" id="n1" autocomplete="new-password"></div><div class="fld"><label for="n2">Confirmez-le</label><input type="password" id="n2" autocomplete="new-password"></div><p class="err" id="nerr"></p><button class="btn" id="ngo">Enregistrer</button>`,
   async()=>{const a=$('#n1').value;if(a.length<8)throw new Error('8 caractères minimum.');if(a!==$('#n2').value)throw new Error('Les deux mots de passe sont différents.');await api('/auth/v1/user',{password:a},'PUT');$('#dlg').close();toast('Mot de passe modifié')},'#ngo','#nerr')}
 
