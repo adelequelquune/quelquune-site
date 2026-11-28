@@ -754,7 +754,7 @@ footer a{display:inline-block;transform-origin:0 50%}
 .qzoom{display:grid;gap:6px;font-size:15px}.qzoom b{font-family:"Courier New",monospace;letter-spacing:.04em}
 .qpw{margin-top:28px}
 .qdlg{border:0;border-radius:8px;padding:0;max-width:min(520px,calc(100vw - 32px));width:100%;background:var(--paper);color:var(--ink);box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
-.qdlg::backdrop{background:rgba(46,31,20,.55)}.qdlg form{display:grid;gap:14px;padding:28px}
+.qdlg::backdrop{background:rgba(46,31,20,.55)}.qdlg.shake{animation:qshk .45s}@keyframes qshk{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}.qdlg .err a{color:inherit}.qdlg .sm{font-size:14px}.qdlg form{display:grid;gap:14px;padding:28px}
 .qdlg label{font-weight:600;font-size:14px}.qdlg input[type=text],.qdlg input[type=email],.qdlg input[type=password]{width:100%;min-height:46px;padding:0 14px;border:1px solid var(--line);border-radius:3px;background:#fff;font:inherit}
 .qdlg input[readonly]{background:#efe7da;color:var(--soft)}.qdlg .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400}.qdlg .chk input{margin-top:4px;width:18px;height:18px;flex:none}
 .qdlg .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}.qdlg .err{color:#9a3b2a;font-weight:600;min-height:1em}
@@ -1216,6 +1216,7 @@ figure.wide,.poster{box-shadow:18px 18px 0 -1px var(--bg),18px 18px 0 0 var(--sa
           <li><b>Les rendez-vous surprises</b><span>Certains ne sont annoncés qu'à l'intérieur du Qlub.</span></li>
         </ul>
         <p class="note">Les inscriptions se font depuis l'espace membre, dans la limite des places disponibles.</p>
+        <button type="button" class="btn main" id="inscription" data-qreg="4555f428-d1c7-4c21-be5e-0040bb2b10bf" data-t="Atelier collaboratif avec Networthink" style="width:max-content;margin-top:16px">Je m'inscris à l'atelier du 2 décembre</button>
       </div>
     </div>
   </div>
@@ -2211,7 +2212,29 @@ const QEV={
       go.disabled=true;go.textContent='Inscription…';
       try{await this.api('/rest/v1/rpc/register_event',{p_event:id,p_first:document.getElementById('qfn').value,p_last:document.getElementById('qln').value});
         f.innerHTML=`<h2 style="font-size:24px">C'est confirmé !</h2><p>Votre inscription est enregistrée. Un e-mail de confirmation part vers <b>${E(sess.email)}</b>.</p><p class="qpre">N'oubliez pas : renseignez vos besoins et vos compétences sur <a href="https://www.networthink.com" target="_blank" rel="noopener">www.networthink.com</a> avant l'atelier.</p><div class="row"><button class="btn main" value="ok">Fermer</button></div>`;f.onsubmit=null;this.render()}
-      catch(x){er.textContent=x.message;go.disabled=false;go.textContent='Confirmer mon inscription'}}},
+      catch(x){er.innerHTML=this.msg(x.message);this.buzz(d);go.disabled=false;go.textContent='Confirmer mon inscription'}}},
+  buzz(el){try{navigator.vibrate&&navigator.vibrate([140,70,140])}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}},
+  msg(m){const t=this.esc(m);return /adhérer/.test(m)?t+` <a href="${QROUTE.ROUTES.membre}">Adhérer au Qlub</a>`:t},
+  open(id,title){const d=document.getElementById('qdlg');if(d.parentNode!==document.body)document.body.appendChild(d);if(sess&&!sess.demo)this.form(id,title);else this.guest(id,title)},
+  guest(id,title){const d=document.getElementById('qdlg'),f=document.getElementById('qdf'),E=this.esc;
+    f.innerHTML=`<h2 style="font-size:24px">Je m'inscris</h2><p class="soft">${E(title)}</p><p class="soft sm">Inscription réservée aux adhérentes du Qlub : indiquez les informations de votre adhésion.</p>
+    <div><label for="gfn">Prénom</label><input type="text" id="gfn" required autocomplete="given-name"></div>
+    <div><label for="gln">Nom</label><input type="text" id="gln" required autocomplete="family-name"></div>
+    <div><label for="gem">E-mail de votre adhésion</label><input type="email" id="gem" required autocomplete="email"></div>
+    <div><label for="gpw">Mot de passe de votre espace membre</label><input type="password" id="gpw" required autocomplete="current-password"></div>
+    <p class="err" id="qerr" role="alert"></p><p class="soft sm">Pas encore membre&nbsp;? <a class="ulink" href="${QROUTE.ROUTES.membre}">Adhérer au Qlub</a></p><div class="row"><button type="button" class="btn line" id="qcan">Annuler</button><button type="submit" class="btn main" id="qgo">Confirmer mon inscription</button></div>`;
+    if(!d.open)d.showModal();document.getElementById('qcan').onclick=()=>d.close();
+    f.onsubmit=async ev=>{ev.preventDefault();const er=document.getElementById('qerr'),go=document.getElementById('qgo'),v=k=>document.getElementById(k).value.trim();er.textContent='';
+      const fail=m=>{er.innerHTML=m;this.buzz(d);go.disabled=false;go.textContent='Confirmer mon inscription'};
+      if(!v('gfn')||!v('gln'))return fail('Indiquez votre prénom et votre nom.');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('gem'))||!document.getElementById('gpw').value)return fail(this.msg("Vous devez d'abord adhérer au Qlub."));
+      go.disabled=true;go.textContent='Vérification…';let u;
+      try{u=await AUTH.signIn(v('gem').toLowerCase(),document.getElementById('gpw').value)}
+      catch(x){return fail(this.msg("Vous devez d'abord adhérer au Qlub.")+'<br><span class="soft sm" style="font-weight:400">Déjà adhérente&nbsp;? Vérifiez l\'e-mail et le mot de passe de votre espace membre.</span>')}
+      save(u);paint();
+      try{await this.api('/rest/v1/rpc/register_event',{p_event:id,p_first:v('gfn'),p_last:v('gln')});
+        f.innerHTML=`<h2 style="font-size:24px">C'est confirmé !</h2><p>Votre inscription est enregistrée. Un e-mail de confirmation part vers <b>${E(u.email)}</b>.</p><p class="qpre">Le lien Zoom vous attend dans votre <a href="/espace-qlub/#events">espace membre</a>. Avant l'atelier, renseignez vos besoins et vos compétences sur <a href="https://www.networthink.com" target="_blank" rel="noopener">www.networthink.com</a>.</p><div class="row"><button class="btn main" value="ok">Fermer</button></div>`;f.onsubmit=null}
+      catch(x){fail(this.msg(x.message))}}},
   pw(){const d=document.getElementById('qdlg'),f=document.getElementById('qdf');
     f.innerHTML=`<h2 style="font-size:24px">Changer mon mot de passe</h2><div><label for="qp1">Nouveau mot de passe (10 caractères minimum)</label><input type="password" id="qp1" minlength="10" required autocomplete="new-password"></div><div><label for="qp2">Confirmez-le</label><input type="password" id="qp2" minlength="10" required autocomplete="new-password"></div><p class="err" id="qerr" role="alert"></p><div class="row"><button type="button" class="btn line" id="qcan">Annuler</button><button type="submit" class="btn main" id="qgo">Enregistrer</button></div>`;
     d.showModal();document.getElementById('qcan').onclick=()=>d.close();
@@ -2232,6 +2255,8 @@ const paint=()=>{const on=!!sess;hl.classList.toggle('on',on);hl.href=on?'/espac
 const guard=()=>{const h=QROUTE.cur();if(h==='espace'&&!sess)QROUTE.go('connexion',true);else if((h==='connexion'||h==='espace')&&sess){location.replace('/espace-qlub/');return}
   hl.setAttribute('aria-current',(h==='connexion'||h==='espace')?'page':'false');if(!(h==='connexion'||h==='espace'))hl.removeAttribute('aria-current')};
 addEventListener('pagechange',guard);paint();guard();
+document.querySelectorAll('[data-qreg]').forEach(b=>b.onclick=()=>QEV.open(b.dataset.qreg,b.dataset.t));
+if(location.hash==='#inscription'){const b=document.querySelector('[data-qreg]');if(b)setTimeout(()=>QEV.open(b.dataset.qreg,b.dataset.t),400)}
 const lf=document.getElementById('loginf'),uid=document.getElementById('uid'),upw=document.getElementById('upw'),er=document.getElementById('lgerr'),nt=document.getElementById('lgnote'),bt=document.getElementById('lgbtn');
 const pwt=document.getElementById('pwt');pwt.addEventListener('click',()=>{const show=upw.type==='password';upw.type=show?'text':'password';pwt.textContent=show?'Masquer':'Afficher';pwt.setAttribute('aria-pressed',show);pwt.setAttribute('aria-label',show?'Masquer le mot de passe':'Afficher le mot de passe')});
 const note=html=>{nt.innerHTML=html;nt.hidden=false};

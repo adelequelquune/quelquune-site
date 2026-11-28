@@ -168,6 +168,7 @@ dialog .hd{display:flex;justify-content:space-between;align-items:start;gap:12px
 .back{margin:24px 0 0}
 .loading{display:grid;place-items:center;min-height:50vh}
 .loading img{width:64px;animation:pulse 1.4s ease-in-out infinite}
+#dlg.shake{animation:qshk .45s}@keyframes qshk{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
 @keyframes pulse{50%{opacity:.4;transform:scale(.94)}}
 .reveal{animation:rv .8s var(--ease) both}
 @keyframes rv{from{opacity:0;transform:translateY(16px)}}
@@ -344,7 +345,7 @@ function regForm(e){const n=String(ME.full_name||'').trim().split(/\s+/),fn=n.sh
  <label class="sw" style="font-weight:400;border:0"><input type="checkbox" id="rok"> <span>Je confirme que ces informations sont exactes.</span></label>
  ${isNW(e)?NETW:''}<p class="err" id="rerr" role="alert" style="margin-top:12px"></p><button class="btn" id="rgo">Confirmer mon inscription</button>`,
  async()=>{if(!$('#rok').checked)throw new Error('Cochez la case pour confirmer vos informations.');
-  await rpc('register_event',{p_event:e.id,p_first:$('#rfn').value,p_last:$('#rln').value});
+  try{await rpc('register_event',{p_event:e.id,p_first:$('#rfn').value,p_last:$('#rln').value})}catch(x){buzz($('#dlg'));throw x}
   modal(`<h2>C'est confirmé !</h2><p style="margin:10px 0 16px">Votre inscription est enregistrée. Un e-mail de confirmation part vers <b>${esc(ME.email)}</b>.</p>${isNW(e)?NETW:''}<p style="margin-top:16px"><button class="btn" onclick="document.getElementById('dlg').close()">Fermer</button></p>`);go(TAB)},'#rgo','#rerr')}
 
 /* ===== accueil ===== */
@@ -540,6 +541,7 @@ async function gifts(){const L=await rpc('qlub_admin_gifts');const lab={to_ship:
  const gl=$('#glab');if(gl)gl.onclick=()=>{const w=window.open('','_blank');if(!w){toast('Autorisez les fenêtres pop-up pour imprimer');return}
   w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Étiquettes Welcome Gift</title><style>@page{size:A4;margin:10mm}body{font-family:Arial,sans-serif;margin:0}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1px dashed #bbb;border-radius:3mm;padding:6mm 7mm;min-height:36mm;font-size:12pt;line-height:1.45;break-inside:avoid}.l small{display:block;color:#777;font-size:8pt;margin-bottom:2mm}p{font-size:10pt;color:#555}</style></head><body><p>Découpez chaque étiquette et collez-la sur l'enveloppe, à côté de la vignette Lettre suivie.</p><div class="g">${ship.map(x=>`<div class="l"><small>Exp. : Quelqu'UNE · The Qlub</small>${addr(x)}</div>`).join('')}</div><scr'+'ipt>onload=()=>print()<\/scr'+'ipt></body></html>`);w.document.close()}}
 /* ===== modale ===== */
+function buzz(el){try{navigator.vibrate&&navigator.vibrate([140,70,140])}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}}
 function modal(html,onOk,btnSel,errSel){const d=$('#dlg');d.innerHTML=`<div class="in"><div style="display:flex;justify-content:flex-end"><button class="x" aria-label="Fermer" onclick="this.closest('dialog').close()">×</button></div>${html}</div>`;if(!d.open)d.showModal();
  if(onOk&&btnSel){const b=d.querySelector(btnSel);b.onclick=async()=>{const er=d.querySelector(errSel);if(er)er.textContent='';b.disabled=true;try{await onOk()}catch(x){if(er)er.textContent=x.message}finally{b.disabled=false}}}}
 
